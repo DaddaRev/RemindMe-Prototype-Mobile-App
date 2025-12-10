@@ -1,4 +1,5 @@
 import './App.css'
+import HomePage from './components/HomePage'
 
 function App() {
   return (
@@ -23,7 +24,9 @@ function App() {
         </div>
 
         {/* App Content Area */}
-        <div className="app-container"></div>
+        <div className="app-container">
+          <HomePage />
+        </div>
       </div>
     </div>
   )
