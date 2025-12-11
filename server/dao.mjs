@@ -2,7 +2,7 @@ import sqlite from 'sqlite3';
 import dayjs from "dayjs";
 
 
-const db = new sqlite.Database('bad_luck.sqlite', (err) => {
+const db = new sqlite.Database('remindMe.sqlite', (err) => {
     if (err) throw err;
 });
 
@@ -11,8 +11,8 @@ export const getMedicines = (planId, day = null) => {
     return new Promise((resolve, reject) => {
         let sql = `
             SELECT 
-                m.id as id_medicine,
-                sm.rowid as id_scheduled_medicine,
+                m.id_medicine,
+                sm.id_scheduled_medicine,
                 m.name,
                 m.description,
                 m.assumption_modality,
@@ -20,7 +20,7 @@ export const getMedicines = (planId, day = null) => {
                 sm.assumption_day,
                 sm.assumption_time
             FROM ScheduledMedicine sm
-            JOIN Medicine m ON sm.id_medicine = m.id
+            JOIN Medicine m ON sm.id_medicine = m.id_medicine
             WHERE sm.id_plan = ?
         `;
         
@@ -39,7 +39,16 @@ export const getMedicines = (planId, day = null) => {
             } else if (rows === undefined || rows.length === 0) {
                 resolve({ error: "No medicines found for this plan. Check the inserted id." });
             } else {
-                resolve(rows);
+                resolve(rows.map(row => ({
+                    id_med: row.id_medicine,
+                    id_sched_med: row.id_scheduled_medicine,
+                    name: row.name,
+                    description: row.description,
+                    assumption_modality: row.assumption_modality,
+                    medicine_type: row.medicine_type,
+                    assumption_day: row.assumption_day,
+                    assumption_time: row.assumption_time
+                })));
             }
         });
     });
@@ -50,10 +59,10 @@ export const updateMedicine = (planId, scheduledMedicineId, updates) => {
     return new Promise((resolve, reject) => {
         // First verify the scheduled medicine exists and belongs to the plan
         const verifySql = `
-            SELECT sm.rowid, sm.id_medicine, m.id
+            SELECT sm.id_scheduled_medicine, sm.id_medicine, m.id_medicine
             FROM ScheduledMedicine sm
-            JOIN Medicine m ON sm.id_medicine = m.id
-            WHERE sm.rowid = ? AND sm.id_plan = ?
+            JOIN Medicine m ON sm.id_medicine = m.id_medicine
+            WHERE sm.id_scheduled_medicine = ? AND sm.id_plan = ?
         `;
         
         db.get(verifySql, [scheduledMedicineId, planId], (err, row) => {
@@ -70,7 +79,7 @@ export const updateMedicine = (planId, scheduledMedicineId, updates) => {
                         description = COALESCE(?, description),
                         assumption_modality = COALESCE(?, assumption_modality),
                         medicine_type = COALESCE(?, medicine_type)
-                    WHERE id = ?
+                    WHERE id_medicine = ?
                 `;
                 
                 db.run(medicineUpdateSql, [
@@ -87,7 +96,7 @@ export const updateMedicine = (planId, scheduledMedicineId, updates) => {
                         const scheduleSql = `
                             UPDATE ScheduledMedicine 
                             SET assumption_time = COALESCE(?, assumption_time)
-                            WHERE rowid = ?
+                            WHERE id_scheduled_medicine = ?
                         `;
                         
                         db.run(scheduleSql, [updates.assumption_time || null, scheduledMedicineId], (err) => {
@@ -109,7 +118,7 @@ export const deleteScheduledMedicine = (planId, scheduledMedicineId) => {
     return new Promise((resolve, reject) => {
         const sql = `
             DELETE FROM ScheduledMedicine 
-            WHERE rowid = ? AND id_plan = ?
+            WHERE id_scheduled_medicine = ? AND id_plan = ?
         `;
         
         db.run(sql, [scheduledMedicineId, planId], function(err) {
