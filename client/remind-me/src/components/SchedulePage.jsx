@@ -1,39 +1,51 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Button, Card, Alert, Spinner } from 'react-bootstrap';
-import { useNavigate } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import API from '../API/API.mjs';
 import MedicineCard from './MedicineCards';
 import './HomePage.css';
 
 const daysOfWeek = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const WEEK_MAX_OFFSET = 6; // today + 6 days = 7-day window
 
-function HomePage(props) {
+function SchedulePage(props) {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const planId = props.planId ?? 1;
 
-  const [currentTime, setCurrentTime] = useState(new Date());
+  // Get initial dayOffset from URL params, default to 1 (tomorrow)
+  const initialOffset = parseInt(searchParams.get('dayOffset')) || 1;
+
+  // anchor "today" once so the window does not slide during the session
+  const baseDateRef = useRef(new Date());
+
+  const [dayOffset, setDayOffset] = useState(initialOffset);
   const [scheduledMedicines, setScheduledMedicines] = useState([]);
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState(null);
 
-  // Update time every minute
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 60000); // 60000ms = 1 minute
+  const getCurrentDate = () => {
+    const currentDate = new Date(baseDateRef.current);
+    currentDate.setDate(currentDate.getDate() + dayOffset);
+    return currentDate;
+  };
 
-    return () => clearInterval(timer);
-  }, []);
+  const currentDate = getCurrentDate();
+  const dayName = daysOfWeek[currentDate.getDay()];
+  const dayNumber = currentDate.getDate();
+  const month = currentDate.getMonth();
 
-  const today = new Date();
-  const dayName = daysOfWeek[today.getDay()];
-  const dayNumber = today.getDate();
-  const month = today.getMonth();
-  
-  const hours = currentTime.getHours().toString().padStart(2, '0');
-  const minutes = currentTime.getMinutes().toString().padStart(2, '0');
-  const timeString = `${hours}:${minutes}`;
+  const goToPreviousDay = () => {
+    if (dayOffset <= 1) {
+      // If we're at day offset 1 (tomorrow), go back to home page (today)
+      navigate('/');
+    } else {
+      setDayOffset(prev => prev - 1);
+    }
+  };
+
+  const goToNextDay = () => setDayOffset(prev => Math.min(WEEK_MAX_OFFSET, prev + 1));
 
   useEffect(() => {
     if (!planId) return;
@@ -45,7 +57,7 @@ function HomePage(props) {
         const meds = await API.getScheduledMedicines(planId, dayName);
         setScheduledMedicines(meds || []);
       } catch (err) {
-        setFetchError('Unable to load medicines for today.');
+        setFetchError('Unable to load medicines for this day.');
         console.error(err);
       } finally {
         setLoading(false);
@@ -55,32 +67,27 @@ function HomePage(props) {
     fetchMedicines();
   }, [planId, dayName]);
 
-  const goToNextDay = () => {
-    // Navigate to schedule page starting from day offset 1 (tomorrow)
-    navigate('/schedule?dayOffset=1');
-  };
+  const atWeekEnd = dayOffset >= WEEK_MAX_OFFSET;
 
   return (
     <div className="home-page d-flex flex-column h-100" style={{ background: '#F5E6D3' }}>
-      {/* Header with the day, date and time */}
+      {/* Header with the day and the date */}
       <div className="home-header">
         <Card className="border-3 border-dark rounded" style={{ background: '#F5E6D3' }}>
           <Card.Body className="p-3">
             <Row className="align-items-center">
               <Col xs={2} className="text-center">
-                {/* Left arrow disabled on home page (today) */}
                 <Button
                   variant="link"
                   className="text-dark p-0 nav-arrow"
-                  disabled
-                  style={{ opacity: 0.3 }}
+                  onClick={goToPreviousDay}
                 >
                   <h3 className="mb-0">&#9664;</h3>
                 </Button>
               </Col>
-              <Col xs={5} className="text-start">
-                <h2 className="fw-bold mb-1" style={{ fontSize: '1.8rem' }}>{dayName.toUpperCase()}</h2>
-                <p className="mb-0 text-muted fw-semibold" style={{ fontSize: '1rem' }}>
+              <Col xs={8} className="text-center">
+                <h2 className="fw-bold mb-1">{dayName.toUpperCase()}</h2>
+                <p className="mb-0 text-muted fw-semibold">
                   {`${dayNumber}/${month + 1 < 10 ? '0' : ''}${month + 1}`}
                 </p>
               </Col>
@@ -89,12 +96,10 @@ function HomePage(props) {
                   variant="link"
                   className="text-dark p-0 nav-arrow"
                   onClick={goToNextDay}
+                  disabled={atWeekEnd}
                 >
                   <h3 className="mb-0">&#9654;</h3>
                 </Button>
-              </Col>
-              <Col xs={3} className="text-end">
-                <h2 className="fw-bold mb-0" style={{ fontSize: '2rem', whiteSpace: 'nowrap' }}>{timeString}</h2>
               </Col>
             </Row>
           </Card.Body>
@@ -116,7 +121,7 @@ function HomePage(props) {
           )}
           {!loading && !fetchError && scheduledMedicines.length === 0 && (
             <Alert variant="secondary" className="mb-3">
-              No medicines scheduled for today.
+              No medicines scheduled for {dayName}.
             </Alert>
           )}
           {scheduledMedicines.map((medicine, idx) => (
@@ -133,7 +138,7 @@ function HomePage(props) {
               <Button
                 className="w-100 py-3 border-3 fw-bold action-btn"
                 style={{ background: 'rgba(242, 238, 238, 1)', borderColor: '#2D2D2D', color: '#000000ff' }}
-                /* onClick={() => navigate('/plans/new')} */
+                onClick={() => navigate('/plans/new')}
               >
                 <div className="d-flex align-items-center justify-content-center gap-2">
                   <span style={{ fontSize: '1.5rem' }}>➕</span>
@@ -145,9 +150,9 @@ function HomePage(props) {
               <Button
                 className="w-100 py-3 border-3 fw-bold action-btn"
                 style={{ background: 'rgba(254, 254, 254, 1)', borderColor: '#2D2D2D', color: '#1a1a1a' }}
-/*                 onClick={() => {
+                onClick={() => {
                   if (planId) navigate(`/plans/${planId}/edit`);
-                }} */
+                }}
               >
                 <div className="d-flex align-items-center justify-content-center gap-2">
                   <span style={{ fontSize: '1.5rem' }}>✏️</span>
@@ -162,4 +167,4 @@ function HomePage(props) {
   );
 }
 
-export default HomePage;
+export default SchedulePage;

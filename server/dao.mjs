@@ -37,7 +37,7 @@ export const getMedicines = (planId, day = null) => {
             if (err) {
                 reject(err);
             } else if (rows === undefined || rows.length === 0) {
-                resolve({ error: "No medicines found for this plan. Check the inserted id." });
+                resolve([]);
             } else {
                 resolve(rows.map(row => ({
                     id_med: row.id_medicine,
