@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Button, Card, Alert, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
 import API from '../API/API.mjs';
 import MedicineCard from './MedicineCards';
-import './HomePage.css';
+import useAlignedClock from '../hooks/useAlignedClock';
+import useSwipe from '../hooks/useSwipe';
 
 const daysOfWeek = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 
@@ -12,19 +13,13 @@ function HomePage(props) {
   const navigate = useNavigate();
   const planId = props.planId ?? 1;
 
-  const [currentTime, setCurrentTime] = useState(new Date());
+
   const [scheduledMedicines, setScheduledMedicines] = useState([]);
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState(null);
 
-  // Update time every minute
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 60000); // 60000ms = 1 minute
-
-    return () => clearInterval(timer);
-  }, []);
+   // personalized hook to have aligned time in both status bar and home page
+  const currentTime = useAlignedClock();
 
   const today = new Date();
   const dayName = daysOfWeek[today.getDay()];
@@ -55,45 +50,31 @@ function HomePage(props) {
     fetchMedicines();
   }, [planId, dayName]);
 
-  const goToNextDay = () => {
+  const goToNextDay = useCallback(() => {
     // Navigate to schedule page starting from day offset 1 (tomorrow)
     navigate('/schedule?dayOffset=1');
-  };
+  }, [navigate]);
+
+  const swipeHandlers = useSwipe(
+    goToNextDay,  // onSwipeLeft - go to next day
+    null,         // onSwipeRight - disabled on home page (today)
+    50            // threshold
+  );
 
   return (
-    <div className="home-page d-flex flex-column h-100" style={{ background: '#F5E6D3' }}>
+    <div className="home-page d-flex flex-column" {...swipeHandlers}>
       {/* Header with the day, date and time */}
       <div className="home-header">
-        <Card className="border-3 border-dark rounded" style={{ background: '#F5E6D3' }}>
+        <Card className="border-3 border-dark rounded home-card">
           <Card.Body className="p-3">
             <Row className="align-items-center">
-              <Col xs={2} className="text-center">
-                {/* Left arrow disabled on home page (today) */}
-                <Button
-                  variant="link"
-                  className="text-dark p-0 nav-arrow"
-                  disabled
-                  style={{ opacity: 0.3 }}
-                >
-                  <h3 className="mb-0">&#9664;</h3>
-                </Button>
-              </Col>
-              <Col xs={5} className="text-start">
+              <Col xs={7} className="text-start">
                 <h2 className="fw-bold mb-1" style={{ fontSize: '1.8rem' }}>{dayName.toUpperCase()}</h2>
                 <p className="mb-0 text-muted fw-semibold" style={{ fontSize: '1rem' }}>
                   {`${dayNumber}/${month + 1 < 10 ? '0' : ''}${month + 1}`}
                 </p>
               </Col>
-              <Col xs={2} className="text-center">
-                <Button
-                  variant="link"
-                  className="text-dark p-0 nav-arrow"
-                  onClick={goToNextDay}
-                >
-                  <h3 className="mb-0">&#9654;</h3>
-                </Button>
-              </Col>
-              <Col xs={3} className="text-end">
+              <Col xs={5} className="text-end">
                 <h2 className="fw-bold mb-0" style={{ fontSize: '2rem', whiteSpace: 'nowrap' }}>{timeString}</h2>
               </Col>
             </Row>
@@ -102,7 +83,7 @@ function HomePage(props) {
       </div>
 
       {/* Medicines list */}
-      <div className="medicines-list flex-grow-1 overflow-auto py-3" style={{ background: '#F5E6D3' }}>
+      <div className="medicines-list flex-grow-1 overflow-auto py-3">
         <Container>
           {loading && (
             <div className="d-flex justify-content-center my-4">
@@ -126,7 +107,7 @@ function HomePage(props) {
       </div>
 
       {/* Action buttons */}
-      <div className="action-section border-top border-3 border-dark" style={{ background: '#F5E6D3' }}>
+      <div className="action-section border-top border-3 border-dark">
         <Container className="py-3">
           <Row className="g-2">
             <Col xs={6}>

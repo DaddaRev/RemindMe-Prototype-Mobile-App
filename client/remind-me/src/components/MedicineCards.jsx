@@ -21,11 +21,9 @@ export function MedicineCard({ medicine, index }) {
       style={{ borderColor: '#2D2D2D', background: '#FFFBF7' }}
     >
       <Card.Body className="p-3">
-        <h4 className="fw-bold mb-2">{medicine.assumption_time}</h4>
-        <hr className="my-2" />
-        <Row className="align-items-center">
+        <Row className="align-items-center mb-2">
           <Col xs={9}>
-            <p className="mb-0 fw-semibold text-uppercase">{medicine.description}</p>
+            <h4 className="fw-bold mb-0">{medicine.assumption_time} - {medicine.name}</h4>
           </Col>
           <Col xs={3} className="text-end">
             <span style={{ fontSize: '2rem' }}>
@@ -33,6 +31,8 @@ export function MedicineCard({ medicine, index }) {
             </span>
           </Col>
         </Row>
+        <hr className="my-2" />
+        <p className="mb-0 fw-semibold text-uppercase">{medicine.description}</p>
       </Card.Body>
     </Card>
   );

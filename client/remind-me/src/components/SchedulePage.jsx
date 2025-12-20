@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Button, Card, Alert, Spinner } from 'react-bootstrap';
 import { useNavigate, useSearchParams } from 'react-router';
 import API from '../API/API.mjs';
 import MedicineCard from './MedicineCards';
-import './HomePage.css';
+import useSwipe from '../hooks/useSwipe';
 
 const daysOfWeek = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const WEEK_MAX_OFFSET = 6; // today + 6 days = 7-day window
@@ -36,16 +36,22 @@ function SchedulePage(props) {
   const dayNumber = currentDate.getDate();
   const month = currentDate.getMonth();
 
-  const goToPreviousDay = () => {
+  const goToPreviousDay = useCallback(() => {
     if (dayOffset <= 1) {
       // If we're at day offset 1 (tomorrow), go back to home page (today)
       navigate('/');
     } else {
       setDayOffset(prev => prev - 1);
     }
-  };
+  }, [dayOffset, navigate]);
 
-  const goToNextDay = () => setDayOffset(prev => Math.min(WEEK_MAX_OFFSET, prev + 1));
+  const goToNextDay = useCallback(() => setDayOffset(prev => Math.min(WEEK_MAX_OFFSET, prev + 1)), []);
+
+  const swipeHandlers = useSwipe(
+    goToNextDay,      // onSwipeLeft - go to next day
+    goToPreviousDay,  // onSwipeRight - go to previous day
+    50                // threshold
+  );
 
   useEffect(() => {
     if (!planId) return;
@@ -70,36 +76,17 @@ function SchedulePage(props) {
   const atWeekEnd = dayOffset >= WEEK_MAX_OFFSET;
 
   return (
-    <div className="home-page d-flex flex-column h-100" style={{ background: '#F5E6D3' }}>
+    <div className="home-page d-flex flex-column" {...swipeHandlers}>
       {/* Header with the day and the date */}
       <div className="home-header">
-        <Card className="border-3 border-dark rounded" style={{ background: '#F5E6D3' }}>
+        <Card className="border-3 border-dark rounded home-card">
           <Card.Body className="p-3">
             <Row className="align-items-center">
-              <Col xs={2} className="text-center">
-                <Button
-                  variant="link"
-                  className="text-dark p-0 nav-arrow"
-                  onClick={goToPreviousDay}
-                >
-                  <h3 className="mb-0">&#9664;</h3>
-                </Button>
-              </Col>
-              <Col xs={8} className="text-center">
+              <Col xs={12} className="text-center">
                 <h2 className="fw-bold mb-1">{dayName.toUpperCase()}</h2>
                 <p className="mb-0 text-muted fw-semibold">
                   {`${dayNumber}/${month + 1 < 10 ? '0' : ''}${month + 1}`}
                 </p>
-              </Col>
-              <Col xs={2} className="text-center">
-                <Button
-                  variant="link"
-                  className="text-dark p-0 nav-arrow"
-                  onClick={goToNextDay}
-                  disabled={atWeekEnd}
-                >
-                  <h3 className="mb-0">&#9654;</h3>
-                </Button>
               </Col>
             </Row>
           </Card.Body>
@@ -107,7 +94,7 @@ function SchedulePage(props) {
       </div>
 
       {/* Medicines list */}
-      <div className="medicines-list flex-grow-1 overflow-auto py-3" style={{ background: '#F5E6D3' }}>
+      <div className="medicines-list flex-grow-1 overflow-auto py-3">
         <Container>
           {loading && (
             <div className="d-flex justify-content-center my-4">
@@ -131,7 +118,7 @@ function SchedulePage(props) {
       </div>
 
       {/* Action buttons */}
-      <div className="action-section border-top border-3 border-dark" style={{ background: '#F5E6D3' }}>
+      <div className="action-section border-top border-3 border-dark">
         <Container className="py-3">
           <Row className="g-2">
             <Col xs={6}>
