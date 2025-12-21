@@ -9,9 +9,9 @@ import useSwipe from '../hooks/useSwipe';
 
 const daysOfWeek = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 
-function HomePage(props) {
+function HomePage({ editMode, toggleEditMode, planId: planIdProp }) {
   const navigate = useNavigate();
-  const planId = props.planId ?? 1;
+  const planId = planIdProp ?? 1;
 
 
   const [scheduledMedicines, setScheduledMedicines] = useState([]);
@@ -52,7 +52,7 @@ function HomePage(props) {
 
   const goToNextDay = useCallback(() => {
     // Navigate to schedule page starting from day offset 1 (tomorrow)
-    navigate('/schedule?dayOffset=1');
+    navigate('/schedule');
   }, [navigate]);
 
   const swipeHandlers = useSwipe(
@@ -63,6 +63,19 @@ function HomePage(props) {
 
   return (
     <div className="home-page d-flex flex-column" {...swipeHandlers}>
+      {editMode && (
+        <div className="px-3 pt-3 align-self-start" style={{ zIndex: 10 }}>
+          <Button
+            variant="dark"
+            size="lg"
+            className="border-3 fw-bold"
+            onClick={toggleEditMode}
+            aria-label="Back"
+          >
+            ← Back
+          </Button>
+        </div>
+      )}
       {/* Header with the day, date and time */}
       <div className="home-header">
         <Card className="border-3 border-dark rounded home-card">
@@ -101,7 +114,13 @@ function HomePage(props) {
             </Alert>
           )}
           {scheduledMedicines.map((medicine, idx) => (
-            <MedicineCard key={medicine.id_sched_med ?? `med-${idx}`} medicine={medicine} index={idx} />
+            <MedicineCard
+              key={medicine.id_sched_med ?? `med-${idx}`}
+              medicine={medicine}
+              index={idx}
+              editMode={editMode}
+              onEdit={(med) => navigate(`/plans/${planId}/scheduled/${med.id_sched_med}/edit`)}
+            />
           ))}
         </Container>
       </div>
@@ -109,34 +128,45 @@ function HomePage(props) {
       {/* Action buttons */}
       <div className="action-section border-top border-3 border-dark">
         <Container className="py-3">
-          <Row className="g-2">
-            <Col xs={6}>
-              <Button
-                className="w-100 py-3 border-3 fw-bold action-btn"
-                style={{ background: 'rgba(242, 238, 238, 1)', borderColor: '#2D2D2D', color: '#000000ff' }}
-                /* onClick={() => navigate('/plans/new')} */
-              >
-                <div className="d-flex align-items-center justify-content-center gap-2">
-                  <span style={{ fontSize: '1.5rem' }}>➕</span>
-                  <span>NEW<br />PLAN</span>
-                </div>
-              </Button>
-            </Col>
-            <Col xs={6}>
-              <Button
-                className="w-100 py-3 border-3 fw-bold action-btn"
-                style={{ background: 'rgba(254, 254, 254, 1)', borderColor: '#2D2D2D', color: '#1a1a1a' }}
-/*                 onClick={() => {
-                  if (planId) navigate(`/plans/${planId}/edit`);
-                }} */
-              >
-                <div className="d-flex align-items-center justify-content-center gap-2">
-                  <span style={{ fontSize: '1.5rem' }}>✏️</span>
-                  <span>UPDATE<br />PLAN</span>
-                </div>
-              </Button>
-            </Col>
-          </Row>
+          {editMode ? (
+            <Button
+              className="w-100 py-3 border-3 fw-bold action-btn"
+              style={{ background: 'rgba(254, 254, 254, 1)', borderColor: '#2D2D2D', color: '#1a1a1a' }}
+              onClick={() => navigate('/help')}
+            >
+              <div className="d-flex align-items-center justify-content-center gap-2">
+                <span style={{ fontSize: '1.5rem' }}>📞</span>
+                <span>ASK<br />FOR HELP</span>
+              </div>
+            </Button>
+          ) : (
+            <Row className="g-2">
+              <Col xs={6}>
+                <Button
+                  className="w-100 py-3 border-3 fw-bold action-btn"
+                  style={{ background: 'rgba(242, 238, 238, 1)', borderColor: '#2D2D2D', color: '#000000ff' }}
+                  /* onClick={() => navigate('/plans/new')} */
+                >
+                  <div className="d-flex align-items-center justify-content-center gap-2">
+                    <span style={{ fontSize: '1.5rem' }}>➕</span>
+                    <span>NEW<br />PLAN</span>
+                  </div>
+                </Button>
+              </Col>
+              <Col xs={6}>
+                <Button
+                  className="w-100 py-3 border-3 fw-bold action-btn"
+                  style={{ background: 'rgba(254, 254, 254, 1)', borderColor: '#2D2D2D', color: '#1a1a1a' }}
+                  onClick={toggleEditMode}
+                >
+                  <div className="d-flex align-items-center justify-content-center gap-2">
+                    <span style={{ fontSize: '1.5rem' }}>✏️</span>
+                    <span>UPDATE<br />PLAN</span>
+                  </div>
+                </Button>
+              </Col>
+            </Row>
+          )}
         </Container>
       </div>
     </div>
