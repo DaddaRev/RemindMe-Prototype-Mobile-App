@@ -4,7 +4,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import { useNavigate } from 'react-router';
 import BackButton from './BackButton';
 
-function PersonalizationStep() {
+function PersonalizationStep_1() {
     const [morning, setMorning] = useState(null); // '7-10' | '10-13' | null
     const [afternoon, setAfternoon] = useState(null); // '13-16' | '16-19' | null
     const [evening, setEvening] = useState(null); // '19-22' | '22-01' | null
@@ -135,4 +135,4 @@ function PersonalizationStep() {
     );
 }
 
-export default PersonalizationStep;
+export default PersonalizationStep_1;

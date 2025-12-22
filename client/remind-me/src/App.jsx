@@ -3,7 +3,7 @@ import HomePage from './components/HomePage'
 import DefaultLayout from './components/DefaultLayout'
 import NewPlanPage from './components/NewPlanPage'
 import { Navigate, Route, Routes } from "react-router"
-import PersonalizationStep from './components/PersonalizationStep_1'
+import PersonalizationStep_1 from './components/PersonalizationStep_1'
 import PersonalizationStep_2 from './components/PersonalizationStep_2'
 import HelpPage from './components/HelpPage'
 import SchedulePage from './components/SchedulePage'
@@ -24,7 +24,7 @@ function App() {
         <Route path="/setup" element={!hasPlan ? <SetupPage/> : <Navigate replace to ="/" />}></Route>
         <Route path="/newPlan">
           <Route index element={<NewPlanPage/>} />
-          <Route path="step1" element={<PersonalizationStep/>} />
+          <Route path="step1" element={<PersonalizationStep_1/>} />
           <Route path="step2" element={<PersonalizationStep_2/>} />
         </Route>
         <Route path="/help" element={<HelpPage/>} />
