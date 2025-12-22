@@ -16,7 +16,7 @@ function PersonalizationStep() {
         navigate("/");
     }
     const nextStep = () => {
-        navigate("/newPlan/personalization/2");
+        navigate("/newPlan/step2");
     }
     const askForHelp = () => {
         navigate("/help");

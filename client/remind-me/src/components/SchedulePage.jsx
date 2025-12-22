@@ -9,10 +9,10 @@ import useSwipe from '../hooks/useSwipe';
 const daysOfWeek = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const WEEK_MAX_OFFSET = 6; // today + 6 days = 7-day window
 
-function SchedulePage({ editMode, toggleEditMode, planId: planIdProp }) {
+function SchedulePage(props) {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const planId = planIdProp ?? 1;
+  const planId = props.planId ?? 1;
 
   // Get initial dayOffset from URL params, default to 1 (tomorrow)
   const initialOffset = 1;
@@ -77,13 +77,12 @@ function SchedulePage({ editMode, toggleEditMode, planId: planIdProp }) {
 
   return (
     <div className="home-page d-flex flex-column" {...swipeHandlers}>
-      {editMode && (
+      {props.editMode && (
         <div className="px-3 pt-3 align-self-start" style={{ zIndex: 10 }}>
           <Button
-            variant="dark"
-            size="lg"
-            className="border-3 fw-bold"
-            onClick={toggleEditMode}
+            className="border-3 fw-bold action-btn"
+            style={{ background: 'rgba(254, 254, 254, 1)', borderColor: '#2D2D2D', color: '#1a1a1a' }}
+            onClick={props.toggleEditMode}
             aria-label="Back"
           >
             ← Back
@@ -129,7 +128,7 @@ function SchedulePage({ editMode, toggleEditMode, planId: planIdProp }) {
               key={medicine.id_sched_med ?? `med-${idx}`}
               medicine={medicine}
               index={idx}
-              editMode={editMode}
+              editMode={props.editMode}
               onEdit={(med) => navigate(`/plans/${planId}/scheduled/${med.id_sched_med}/edit`)}
             />
           ))}
@@ -140,17 +139,17 @@ function SchedulePage({ editMode, toggleEditMode, planId: planIdProp }) {
       <div className="action-section border-top border-3 border-dark">
         <Container className="py-3">
           <Row className="g-2">
-            {editMode ? (
+            {props.editMode ? (
               <Col xs={12}>
                 <Button
                   className="w-100 py-3 border-3 fw-bold action-btn"
                   style={{ background: 'rgba(254, 254, 254, 1)', borderColor: '#2D2D2D', color: '#1a1a1a' }}
                   onClick={() => navigate('/help')}
                 >
-                  <div className="d-flex align-items-center justify-content-center gap-2">
-                    <span style={{ fontSize: '1.5rem' }}>📞</span>
-                    <span>ASK<br />FOR HELP</span>
-                  </div>
+                <div className="d-flex align-items-center justify-content-center gap-4">
+                  <span>ASK FOR HELP</span>
+                  <span><i class="bi bi-telephone-fill text-success fs-3"></i></span>
+                </div>
                 </Button>
               </Col>
             ) : (
@@ -161,9 +160,9 @@ function SchedulePage({ editMode, toggleEditMode, planId: planIdProp }) {
                     style={{ background: 'rgba(242, 238, 238, 1)', borderColor: '#2D2D2D', color: '#000000ff' }}
                     onClick={() => navigate('/plans/new')}
                   >
-                    <div className="d-flex align-items-center justify-content-center gap-2">
-                      <span style={{ fontSize: '1.5rem' }}>➕</span>
+                    <div className="d-flex align-items-center justify-content-center gap-4">
                       <span>NEW<br />PLAN</span>
+                      <span><i class="bi bi-plus-circle-fill fs-3 text-success" ></i></span>
                     </div>
                   </Button>
                 </Col>
@@ -171,11 +170,11 @@ function SchedulePage({ editMode, toggleEditMode, planId: planIdProp }) {
                   <Button
                     className="w-100 py-3 border-3 fw-bold action-btn"
                     style={{ background: 'rgba(254, 254, 254, 1)', borderColor: '#2D2D2D', color: '#1a1a1a' }}
-                    onClick={toggleEditMode}
+                    onClick={props.toggleEditMode}
                   >
-                    <div className="d-flex align-items-center justify-content-center gap-2">
-                      <span style={{ fontSize: '1.5rem' }}>✏️</span>
+                    <div className="d-flex align-items-center justify-content-center gap-4">
                       <span>UPDATE<br />PLAN</span>
+                      <span><i class="bi bi-pencil-fill text-warning fs-3"></i></span>
                     </div>
                   </Button>
                 </Col>

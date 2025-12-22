@@ -22,18 +22,16 @@ export function MedicineCard(props) {
           <Col xs={3} className="text-end d-flex justify-content-end align-items-center gap-3">
             {/* Switch order: show medicine icon, then the (larger) pencil */}
             <span style={{ fontSize: '2rem' }}>
-              {getMedicineIcon(props.medicine?.medicine_type)}
+              {!props.editMode && getMedicineIcon(props.medicine?.medicine_type)}
             </span>
             {props.editMode && (
               <Button
-                variant="dark"
-                size="lg"
                 onClick={() => props.onEdit?.(props.medicine)}
                 aria-label="Edit medicine"
-                className="border-3 fw-bold d-inline-flex align-items-center justify-content-center"
-                style={{ fontSize: '2rem', lineHeight: 1, padding: '0.25rem 0.5rem' }}
+                className="border-3 fw-bold action-btn d-inline-flex align-items-center justify-content-center"
+                style={{ background: 'rgba(254, 254, 254, 1)', borderColor: '#2D2D2D', color: '#1a1a1a', fontSize: '2rem', lineHeight: 1, padding: '0.25rem 0.5rem' }}
               >
-                ✏️
+                <i class="bi bi-pencil-fill text-warning fs-3"></i>
               </Button>
             )}
           </Col>

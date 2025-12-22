@@ -2,7 +2,7 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { useState } from 'react';
 import InfoPlanModal from './InfoPlanModal';
-import { useNavigate } from 'react-router';
+import { Outlet, useNavigate } from 'react-router';
 import BackButton from './BackButton';
 
 
@@ -13,7 +13,7 @@ function NewPlanPage() {
     const navigate = useNavigate();
 
     const startPersonalizing = () => {
-        navigate("/newPlan/personalization/1");
+        navigate("/newPlan/step1");
     }
 
     const skip = () => {
@@ -66,6 +66,7 @@ function NewPlanPage() {
                 </Col>
             </Row>
             <InfoPlanModal show={show} onHide={() => setShow(false)} />
+            <Outlet />
         </Container>
     );
 }
