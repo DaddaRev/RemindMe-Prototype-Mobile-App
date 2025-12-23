@@ -1,0 +1,486 @@
+import React, { useState, useEffect } from 'react';
+import { Container, Button, Form, Alert, Spinner } from 'react-bootstrap';
+import { useNavigate, useLocation, useParams } from 'react-router';
+import API from "../API/API.mjs";
+
+const UpdatePage = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { planId, medicineId } = useParams(); // Prende gli ID dall'URL
+
+  // Recupera dati passati dalla Home o null se accesso diretto
+  const passedData = location.state?.medicine;
+  const autoEdit = location.state?.autoEdit || false; // Se true, parte in edit mode
+
+  const fromSchedule = location.state?.fromSchedule || false;
+  const originalDayOffset = location.state?.dayOffset || 1;
+
+  // Se autoEdit è true, partiamo subito in editing (Flusso "Update Plan")
+  // Altrimenti partiamo in false (Flusso "Info/Lettura")
+  const [isEditing, setIsEditing] = useState(autoEdit);
+
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(!passedData); // Carica se non abbiamo dati passati
+
+  // STATI PER I MODALI CUSTOM
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showTimeModal, setShowTimeModal] = useState(false);
+
+  const [errorMsg, setErrorMsg] = useState('');
+  const [showErrorModal, setShowErrorModal] = useState(false);
+
+  // STATI PER IL TIME PICKER IBRIDO
+  const [pickerTime, setPickerTime] = useState({ h: '08', m: '00' });
+  const [viewMode, setViewMode] = useState('scroll');
+  const [activeField, setActiveField] = useState(null);
+  const [inputBuffer, setInputBuffer] = useState('');
+
+  const [formData, setFormData] = useState(null);
+
+  // FETCH DATA (Gestione Reload Pagina)
+  useEffect(() => {
+    if (passedData) {
+      // Abbiamo i dati dallo state (navigazione interna)
+      initializeForm(passedData);
+      setLoading(false);
+    } else {
+      // Non abbiamo dati (es. refresh pagina), li scarichiamo
+      const loadData = async () => {
+        try {
+          const meds = await API.getScheduledMedicines(planId);
+          const found = meds ? meds.find(m => m.id_sched_med.toString() === medicineId.toString()) : null;
+
+          if (found) {
+            initializeForm(found);
+          } else {
+            setError("Medicine not found.");
+          }
+        } catch (err) {
+          console.error(err);
+          setError("Error loading medicine details.");
+        } finally {
+          setLoading(false);
+        }
+      };
+      loadData();
+    }
+  }, [passedData, planId, medicineId]);
+
+  const initializeForm = (data) => {
+    setFormData({
+      id_sched_med: data.id_sched_med,
+      name: data.name,
+      time: data.time || data.assumption_time || '08:00',
+      modality: data.assumption_modality || 'ORAL',
+      type: data.type || data.medicine_type || 'pill',
+      description: data.description || '',
+      notify: true 
+    });
+  };
+
+  const goBackWithFeedback = (msg) => {
+    if (fromSchedule) {
+      // Se venivo dallo Schedule, torno lì al giorno specifico
+      navigate('/schedule', {
+        state: {
+          feedback: msg,
+          returnToOffset: originalDayOffset
+        }
+      });
+    } else {
+      // Altrimenti torno alla Home
+      navigate('/', { state: { feedback: msg } });
+    }
+  };
+
+  const openTimePicker = () => {
+    const [h, m] = formData.time.split(':');
+    setPickerTime({ h, m });
+    setViewMode('scroll');
+    setInputBuffer('');
+    setActiveField(null);
+    setShowTimeModal(true);
+  };
+
+  const selectScrollTime = (type, value) => {
+    setPickerTime(prev => ({ ...prev, [type]: value.toString().padStart(2, '0') }));
+  };
+
+  const activateKeypad = (field) => {
+    setViewMode('keypad');
+    setActiveField(field);
+    setInputBuffer('');
+  };
+
+  const handleKeypadInput = (num) => {
+    const val = num.toString();
+    if (activeField === 'hours') {
+      if (inputBuffer === '' && num > 2) {
+        setPickerTime(prev => ({ ...prev, h: '0' + val }));
+        activateKeypad('minutes');
+        return;
+      }
+      const newBuffer = inputBuffer + val;
+      if (newBuffer.length === 2) {
+        if (parseInt(newBuffer) > 23) {
+          setPickerTime(prev => ({ ...prev, h: '0' + val }));
+          setInputBuffer('');
+        } else {
+          setPickerTime(prev => ({ ...prev, h: newBuffer }));
+          activateKeypad('minutes');
+        }
+      } else {
+        setPickerTime(prev => ({ ...prev, h: val }));
+        setInputBuffer(newBuffer);
+      }
+    } else if (activeField === 'minutes') {
+      if (inputBuffer === '' && num > 5) {
+        setPickerTime(prev => ({ ...prev, m: '0' + val }));
+        setActiveField('done');
+        return;
+      }
+      const newBuffer = inputBuffer + val;
+      if (newBuffer.length === 2) {
+        if (parseInt(newBuffer) > 59) {
+          setPickerTime(prev => ({ ...prev, m: '0' + val }));
+        } else {
+          setPickerTime(prev => ({ ...prev, m: newBuffer }));
+          setActiveField('done');
+        }
+        setInputBuffer('');
+      } else {
+        setPickerTime(prev => ({ ...prev, m: val }));
+        setInputBuffer(newBuffer);
+      }
+    }
+  };
+
+  const handleBackspace = () => {
+    setInputBuffer(prev => prev.slice(0, -1));
+    if (activeField === 'hours') setPickerTime(prev => ({ ...prev, h: '--' }));
+    if (activeField === 'minutes') setPickerTime(prev => ({ ...prev, m: '--' }));
+  };
+
+  const saveTime = () => {
+    let finalH = pickerTime.h.replace('-', '0').padStart(2, '0');
+    let finalM = pickerTime.m.replace('-', '0').padStart(2, '0');
+    setFormData({ ...formData, time: `${finalH}:${finalM}` });
+    setShowTimeModal(false);
+  };
+
+  const scrollHours = Array.from({ length: 24 }, (_, i) => i);
+  const scrollMinutes = Array.from({ length: 12 }, (_, i) => i * 5);
+
+  const getModalityIcon = (mod) => {
+    switch (mod) { case 'ORAL': return '👄'; case 'INJECTION': return '💉'; case 'TOPICAL': return '🧴'; case 'DROPS': return '💧'; case 'INHALATION': return '💨'; default: return '👄'; }
+  };
+  const getMedicineIcon = (type) => {
+    switch (type) { case 'pill': return '💊'; case 'sachet': return '🥤'; case 'needle': return '💉'; case 'cream': return '🧴'; case 'drops': return '💧'; default: return '💊'; }
+  };
+
+  // --- API CALLS ---
+  const confirmSave = async () => {
+    try {
+      const apiData = {
+        assumption_time: formData.time,
+        assumption_modality: formData.modality,
+        medicine_type: formData.type,
+        description: formData.description,
+        name: formData.name,
+      };
+
+      await API.updateScheduledMedicine(planId, formData.id_sched_med, apiData);
+
+      setShowConfirmModal(false);
+      setIsEditing(false);
+
+      // Successo: Torna indietro col messaggio
+      goBackWithFeedback('Changes saved successfully!');
+
+    } catch (err) {
+      console.error(err);
+      setShowConfirmModal(false);
+      // Errore: Resta qui e mostra il modale rosso
+      setErrorMsg('Error saving data. Please try again.');
+      setShowErrorModal(true);
+    }
+  };
+
+  // Funzione chiamata quando si conferma l'eliminazione dal modale
+  const confirmDelete = async () => {
+    try {
+      await API.deleteScheduledMedicine(planId, formData.id_sched_med);
+      // Successo: Torna indietro col messaggio
+      goBackWithFeedback('Medicine deleted successfully!');
+    } catch (err) {
+      console.error("Error deleting:", err);
+      setShowDeleteModal(false);
+      // Errore: Resta qui e mostra il modale rosso
+      setErrorMsg('Error deleting medicine.');
+      setShowErrorModal(true);
+    }
+  };
+
+  const handleTopRightAction = () => {
+    if (isEditing) {
+      // MODALITA' EDIT: Il tasto è un cestino -> APRI MODALE DELETE
+      setShowDeleteModal(true);
+    } else {
+      // MODALITA' LETTURA: Il tasto è una matita -> ATTIVA MODIFICA
+      setIsEditing(true);
+    }
+  };
+
+  if (loading) return <div className="p-5 text-center"><Spinner animation="border" /></div>;
+  if (error) return <div className="p-5"><Alert variant="danger">{error}</Alert><Button onClick={() => navigate('/')}>Go Back</Button></div>;
+  if (!formData) return null;
+
+  const isTimeValid = !pickerTime.h.includes('-') && !pickerTime.m.includes('-');
+
+  return (
+    <div className="d-flex flex-column h-100" style={{ backgroundColor: '#F5E6D3', position: 'relative' }}>
+
+      {/* HEADER */}
+      <div className="p-3 d-flex align-items-center justify-content-between">
+        <div className="d-flex align-items-center">
+          <Button variant="link" onClick={() => navigate(-1)} className="text-dark-custom p-0 me-3 text-decoration-none nav-arrow">
+            <span style={{ fontSize: '2.5rem', lineHeight: '0.8', fontWeight: 'bold' }}>←</span>
+          </Button>
+          <h2 className="m-0 fw-bold text-uppercase text-dark-custom" style={{ fontSize: '1.4rem', lineHeight: '1.1' }}>
+            {formData.name}
+          </h2>
+        </div>
+        <Button
+          variant="outline-dark"
+          className="rounded-circle d-flex align-items-center justify-content-center border-3"
+          style={{ width: '50px', height: '50px', fontSize: '1.5rem', borderColor: '#2D2D2D', color: '#2D2D2D', backgroundColor: '#FFFBF7' }}
+          onClick={handleTopRightAction}
+        >
+          {isEditing ? '🗑️' : '✏️'}
+        </Button>
+      </div>
+
+      {/* BODY */}
+      <Container className="py-2 flex-grow-1 overflow-auto no-scrollbar">
+        {!isEditing && (
+          // VISTA LETTURA
+          <div className="d-flex flex-column gap-3 px-1 mt-3">
+
+            {/* 1. Time */}
+            <div className="d-flex align-items-center justify-content-between">
+              <div className="label-text w-50">ASSUMPTION<br />TIME:</div>
+              <div className="w-100 ms-2 d-flex align-items-center justify-content-start">
+                <div className="d-flex justify-content-center align-items-center" style={{ width: '45px', marginRight: '8px' }}>
+                  <span style={{ fontSize: '2rem', lineHeight: 1 }}>⏰</span>
+                </div>
+                <div className="fs-1 fw-bold text-dark-custom">{formData.time}</div>
+              </div>
+            </div>
+            {/* 2. Modality */}
+            <div className="d-flex align-items-center justify-content-between mt-2">
+              <div className="label-text w-50">ASSUMPTION<br />MODALITY:</div>
+              <div className="w-100 ms-2 d-flex align-items-center justify-content-start">
+                <div className="d-flex justify-content-center align-items-center" style={{ width: '45px', marginRight: '8px' }}>
+                  <span style={{ fontSize: '2rem', lineHeight: 1 }}>{getModalityIcon(formData.modality)}</span>
+                </div>
+                <div className="fs-2 fw-bold text-uppercase text-dark-custom">{formData.modality}</div>
+              </div>
+            </div>
+            {/* 3. Medicine Type */}
+            <div className="d-flex align-items-center justify-content-between mt-2">
+              <div className="label-text">MEDICINE TYPE:</div>
+              <div className="d-flex align-items-center">
+                <div className="edit-field-box justify-content-center bg-white border-3" style={{ width: '80px', padding: '5px', height: '55px', minHeight: 'unset' }}>
+                  <span style={{ fontSize: '2rem' }}>{getMedicineIcon(formData.type)}</span>
+                </div>
+              </div>
+            </div>
+            {/* 4. Description (SPOSTATO IN FONDO) */}
+            <div className="mt-2 w-100">
+              <div className="label-text">DESCRIPTION:</div>
+              <div className="fst-italic fs-5 mt-2 ps-3 border-start border-3 border-dark text-dark-custom" style={{ minHeight: '60px' }}>
+                {formData.description || <span className="text-muted opacity-75">Nessuna descrizione disponibile</span>}
+              </div>
+            </div>
+
+          </div>
+        )}
+
+        {isEditing && (
+          // VISTA MODIFICA
+          <div className="d-flex flex-column gap-3 px-1 pb-4">
+            {/* 1. Time Select */}
+            <div className="d-flex align-items-center justify-content-between">
+              <div className="label-text w-50">ASSUMPTION<br />TIME:</div>
+              <div className="w-100 ms-2 d-flex align-items-center" onClick={openTimePicker}>
+                <div className="d-flex justify-content-center align-items-center" style={{ width: '45px', flexShrink: 0, marginRight: '8px' }}>
+                  <span style={{ fontSize: '2rem', lineHeight: 1 }}>⏰</span>
+                </div>
+                <Form.Control
+                  type="text"
+                  readOnly
+                  value={formData.time}
+                  className="edit-field-box fw-bold border-3"
+                  style={{
+                    cursor: 'pointer', borderColor: '#2D2D2D', height: '55px', backgroundColor: '#FFFBF7', color: '#2D2D2D', fontSize: '1.4rem', textAlign: 'center',
+                    flex: 1, width: '1px', minWidth: 0
+                  }}
+                />
+              </div>
+            </div>
+            {/* 2. Modality Select */}
+            <div className="d-flex align-items-center justify-content-between mt-2">
+              <div className="label-text w-50">ASSUMPTION<br />MODALITY:</div>
+              <div className="w-100 ms-2 d-flex align-items-center">
+                <div className="d-flex justify-content-center align-items-center" style={{ width: '45px', flexShrink: 0, marginRight: '8px' }}>
+                  <span style={{ fontSize: '2rem', lineHeight: 1 }}>{getModalityIcon(formData.modality)}</span>
+                </div>
+                <Form.Select
+                  className="edit-field-box fw-bold border-3 text-uppercase"
+                  style={{
+                    appearance: 'none', cursor: 'pointer', borderColor: '#2D2D2D', height: '55px', textAlign: 'left',
+                    fontSize: '0.95rem', paddingRight: '35px',
+                    flex: 1, width: '1px', minWidth: 0,
+                  }}
+                  value={formData.modality}
+                  onChange={(e) => setFormData({ ...formData, modality: e.target.value })}
+                >
+                  <option value="ORAL">ORAL</option>
+                  <option value="INJECTION">INJECTION</option>
+                  <option value="TOPICAL">TOPICAL</option>
+                  <option value="DROPS">DROPS</option>
+                  <option value="INHALATION">INHALATION</option>
+                </Form.Select>
+              </div>
+            </div>
+            {/* 3. Medicine Type */}
+            <div className="d-flex align-items-center justify-content-between mt-2">
+              <div className="label-text">MEDICINE TYPE:</div>
+              <div className="d-flex align-items-center">
+                <div className="edit-field-box justify-content-center bg-white" style={{ width: '80px', padding: '5px' }}>
+                  <span style={{ fontSize: '2rem' }}>{getMedicineIcon(formData.type)}</span>
+                </div>
+              </div>
+            </div>
+            {/* 4. Description */}
+            <div className="mt-2 w-100">
+              <div className="label-text mb-1">DESCRIPTION:</div>
+              <textarea
+                className="edit-field-box text-start fw-normal align-items-start h-auto w-100"
+                rows="4"
+                style={{ resize: 'none' }}
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                placeholder="Description..."
+              ></textarea>
+            </div>
+            {/* Notification Switch */}
+            <div className="d-flex align-items-center justify-content-between mt-2 p-3 rounded-3 border-3" style={{ border: '2px solid #2D2D2D', background: '#FFFBF7' }}>
+              <div className="label-text" style={{ fontSize: '0.85rem' }}>SEND NOTIFICATION</div>
+              <label className="switch">
+                <input
+                  type="checkbox"
+                  checked={formData.notify}
+                  onChange={(e) => setFormData({ ...formData, notify: e.target.checked })}
+                />
+                <span className="slider"></span>
+              </label>
+            </div>
+            <Button variant="success" className="w-100 py-3 mt-3 btn-thick-border text-uppercase mb-2" style={{ borderRadius: '12px', fontSize: '1.2rem' }} onClick={() => setShowConfirmModal(true)}>
+              CONFIRM CHANGES ✓
+            </Button>
+          </div>
+        )}
+      </Container>
+
+      <div className="p-3 mt-auto border-top border-3 border-dark" style={{ backgroundColor: '#F5E6D3' }}>
+        <Button variant="outline-dark" className="w-100 py-2 fs-5 fw-bold btn-thick-border" style={{ borderRadius: '12px' }}>ASK FOR HELP 📞</Button>
+      </div>
+
+      {showConfirmModal && (
+        <div className="in-app-overlay">
+          <div className="custom-modal-card">
+            <h4 className="fw-bold text-center">CONFIRM CHANGES?</h4>
+            <p className="text-center fs-5">Are you sure you want to save?</p>
+            <div className="d-flex justify-content-between gap-3 mt-2">
+              <Button variant="danger" onClick={() => setShowConfirmModal(false)} className="flex-grow-1 border-2 fw-bold">CANCEL</Button>
+              <Button variant="success" onClick={confirmSave} className="flex-grow-1 fw-bold">YES, SAVE</Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showTimeModal && (
+        <div className="in-app-overlay">
+          <div className="custom-modal-card" style={{ width: '90%' }}>
+            <h4 className="fw-bold text-center mb-0">SET TIME</h4>
+            <div className="tp-header">
+              <div className={`tp-digit-box ${activeField === 'hours' ? 'active' : ''}`} onClick={() => activateKeypad('hours')}>{pickerTime.h}</div>
+              <div className="tp-separator">:</div>
+              <div className={`tp-digit-box ${activeField === 'minutes' ? 'active' : ''}`} onClick={() => activateKeypad('minutes')}>{pickerTime.m}</div>
+            </div>
+            {viewMode === 'scroll' ? (
+              <div className="tp-scroll-container">
+                <div className="tp-column">{scrollHours.map(h => <div key={h} className={`tp-item ${pickerTime.h === h.toString().padStart(2, '0') ? 'selected' : ''}`} onClick={() => selectScrollTime('h', h.toString().padStart(2, '0'))}>{h.toString().padStart(2, '0')}</div>)}</div>
+                <div className="tp-column">{scrollMinutes.map(m => <div key={m} className={`tp-item ${pickerTime.m === m.toString().padStart(2, '0') ? 'selected' : ''}`} onClick={() => selectScrollTime('m', m.toString().padStart(2, '0'))}>{m.toString().padStart(2, '0')}</div>)}</div>
+              </div>
+            ) : (
+              <div className="tp-numpad">
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => <div key={n} className="tp-key" onClick={() => handleKeypadInput(n)}>{n}</div>)}
+                <div className="tp-key ghost" onClick={() => setViewMode('scroll')}>↩</div>
+                <div className="tp-key" onClick={() => handleKeypadInput(0)}>0</div>
+                <div className="tp-key ghost" onClick={handleBackspace}>⌫</div>
+              </div>
+            )}
+            <div className="d-flex justify-content-between gap-3 mt-2">
+              <Button variant="danger" className="flex-grow-1 border-2 fw-bold" onClick={() => setShowTimeModal(false)}>CANCEL</Button>
+              <Button variant={isTimeValid ? "success" : "dark"} className="flex-grow-1 fw-bold" onClick={saveTime} disabled={!isTimeValid}>OK</Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showDeleteModal && (
+        <div className="in-app-overlay">
+          <div className="custom-modal-card">
+            <h4 className="fw-bold text-center text-danger">DELETE MEDICINE?</h4>
+            <p className="text-center fs-5">
+              Are you sure you want to delete <strong>{formData.name}</strong> from your plan?
+            </p>
+            <div className="d-flex justify-content-between gap-3 mt-2">
+              <Button
+                variant="outline-dark"
+                onClick={() => setShowDeleteModal(false)}
+                className="flex-grow-1 border-2 fw-bold"
+              >
+                CANCEL
+              </Button>
+              <Button
+                variant="danger"
+                onClick={confirmDelete}
+                className="flex-grow-1 fw-bold"
+              >
+                YES, DELETE
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showErrorModal && (
+        <div className="in-app-overlay">
+          <div className="custom-modal-card">
+            <h4 className="fw-bold text-center text-danger">ERROR ⚠️</h4>
+            <p className="text-center fs-5">{errorMsg}</p>
+            <Button variant="dark" onClick={() => setShowErrorModal(false)} className="w-100 fw-bold">
+              OK
+            </Button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default UpdatePage;

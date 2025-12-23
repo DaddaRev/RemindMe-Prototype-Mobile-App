@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Button, Card, Alert, Spinner } from 'react-bootstrap';
-import { useNavigate } from 'react-router';
+import { useNavigate, useLocation } from 'react-router';
 import API from '../API/API.mjs';
 import MedicineCard from './MedicineCards';
 import useAlignedClock from '../hooks/useAlignedClock';
@@ -11,12 +11,25 @@ const daysOfWeek = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday',
 
 function HomePage(props) {
   const navigate = useNavigate();
+  const location = useLocation();
   const planId = props.planId ?? 1;
 
 
   const [scheduledMedicines, setScheduledMedicines] = useState([]);
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState(null);
+  const [successMsg, setSuccessMsg] = useState('');
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+  useEffect(() => {
+    // Se arriviamo da UpdatePage con un feedback apre il modale
+    if (location.state?.feedback) {
+      setSuccessMsg(location.state.feedback);
+      setShowSuccessModal(true);
+      // Puliamo lo state della history per evitare che il modale riappaia se si ricarica la pagina
+      window.history.replaceState({}, document.title);
+    }
+  }, [location]);
 
    // personalized hook to have aligned time in both status bar and home page
   const currentTime = useAlignedClock();
@@ -63,6 +76,24 @@ function HomePage(props) {
 
   return (
     <div className="home-page d-flex flex-column" {...swipeHandlers}>
+
+      {showSuccessModal && (
+        <div className="in-app-overlay" style={{ zIndex: 9999 }}>
+          <div className="custom-modal-card">
+            <h4 className="fw-bold text-center text-success">SUCCESS!</h4>
+            <p className="text-center fs-5 mb-4">{successMsg}</p>
+            <Button 
+              variant="success" 
+              onClick={() => setShowSuccessModal(false)} 
+              className="w-100 fw-bold py-2 border-3"
+              style={{ fontSize: '1.2rem' }}
+            >
+              OK
+            </Button>
+          </div>
+        </div>
+      )}
+
       {props.editMode && (
         <div className="px-3 pt-3 align-self-start" style={{ zIndex: 10 }}>
           <Button
@@ -118,7 +149,12 @@ function HomePage(props) {
               medicine={medicine}
               index={idx}
               editMode={props.editMode}
-              onEdit={(med) => navigate(`/plans/${planId}/scheduled/${med.id_sched_med}/edit`)}
+              onEdit={(med) => navigate(`/plans/${planId}/scheduled/${med.id_sched_med}`, { 
+                  state: { medicine: med, autoEdit: true } 
+              })}
+              onClick={() => navigate(`/plans/${planId}/scheduled/${medicine.id_sched_med}`, { 
+                  state: { medicine, autoEdit: false } 
+              })}
             />
           ))}
         </Container>

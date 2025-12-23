@@ -1,21 +1,22 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Button, Card, Alert, Spinner } from 'react-bootstrap';
-import { useNavigate, useSearchParams } from 'react-router';
+import { useNavigate, useSearchParams, useLocation } from 'react-router';
 import API from '../API/API.mjs';
 import MedicineCard from './MedicineCards';
 import useSwipe from '../hooks/useSwipe';
 
-const daysOfWeek = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const WEEK_MAX_OFFSET = 6; // today + 6 days = 7-day window
 
 function SchedulePage(props) {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const planId = props.planId ?? 1;
 
   // Get initial dayOffset from URL params, default to 1 (tomorrow)
-  const initialOffset = 1;
+  const initialOffset = location.state?.returnToOffset || 1;
 
   // anchor "today" once so the window does not slide during the session
   const baseDateRef = useRef(new Date());
@@ -24,6 +25,18 @@ function SchedulePage(props) {
   const [scheduledMedicines, setScheduledMedicines] = useState([]);
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState(null);
+  const [successMsg, setSuccessMsg] = useState('');
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+  useEffect(() => {
+    // Se c'è un messaggio di feedback (es. "Deleted!"), mostralo
+    if (location.state?.feedback) {
+      setSuccessMsg(location.state.feedback);
+      setShowSuccessModal(true);
+      // Puliamo lo state per non rimostrarlo se l'utente ricarica
+      window.history.replaceState({}, document.title);
+    }
+  }, [location]);
 
   const getCurrentDate = () => {
     const currentDate = new Date(baseDateRef.current);
@@ -77,6 +90,24 @@ function SchedulePage(props) {
 
   return (
     <div className="home-page d-flex flex-column" {...swipeHandlers}>
+
+      {showSuccessModal && (
+        <div className="in-app-overlay" style={{ zIndex: 9999 }}>
+          <div className="custom-modal-card">
+            <h4 className="fw-bold text-center text-success">SUCCESS!</h4>
+            <p className="text-center fs-5 mb-4">{successMsg}</p>
+            <Button
+              variant="success"
+              onClick={() => setShowSuccessModal(false)}
+              className="w-100 fw-bold py-2 border-3"
+              style={{ fontSize: '1.2rem' }}
+            >
+              OK
+            </Button>
+          </div>
+        </div>
+      )}
+
       {props.editMode && (
         <div className="px-3 pt-3 align-self-start" style={{ zIndex: 10 }}>
           <Button
@@ -129,7 +160,22 @@ function SchedulePage(props) {
               medicine={medicine}
               index={idx}
               editMode={props.editMode}
-              onEdit={(med) => navigate(`/plans/${planId}/scheduled/${med.id_sched_med}/edit`)}
+              onEdit={(med) => navigate(`/plans/${planId}/scheduled/${med.id_sched_med}`, {
+                state: {
+                  medicine: med,
+                  autoEdit: true,
+                  fromSchedule: true,    
+                  dayOffset: dayOffset   // Giorno corrente
+                }
+              })}
+              onClick={() => navigate(`/plans/${planId}/scheduled/${medicine.id_sched_med}`, {
+                state: {
+                  medicine,
+                  autoEdit: false,
+                  fromSchedule: true,
+                  dayOffset: dayOffset
+                }
+              })}
             />
           ))}
         </Container>
@@ -146,10 +192,10 @@ function SchedulePage(props) {
                   style={{ background: 'rgba(254, 254, 254, 1)', borderColor: '#2D2D2D', color: '#1a1a1a' }}
                   onClick={() => navigate('/help')}
                 >
-                <div className="d-flex align-items-center justify-content-center gap-4">
-                  <span>ASK FOR HELP</span>
-                  <span><i class="bi bi-telephone-fill text-success fs-3"></i></span>
-                </div>
+                  <div className="d-flex align-items-center justify-content-center gap-4">
+                    <span>ASK FOR HELP</span>
+                    <span><i class="bi bi-telephone-fill text-success fs-3"></i></span>
+                  </div>
                 </Button>
               </Col>
             ) : (
