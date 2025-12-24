@@ -104,3 +104,23 @@ Responses:
 - `404 Not Found` — invalid plan or scheduled_medicine `id`
 
 
+### **Check for pending notifications**
+
+URL: `/api/notifications/check`
+
+HTTP Method: GET.
+
+Query params: None.
+
+Description: Checks if there is a pending notification to be displayed on the client. This endpoint is primarily used for the prototype's polling mechanism to simulate server-side push notifications. If the manual trigger has been activated on the server, this returns a positive status.
+
+Responses:
+- `200 OK` — JSON object containing the status (`yes` or `no`) and the message (name) if a notification exists.
+- `500 Internal Server Error` — Generic server error.
+
+Response body (example - Notification pending):
+```json
+{
+  "status": "yes",
+  "message": "TACHIPIRINA"
+}

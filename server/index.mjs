@@ -1,11 +1,28 @@
 import express from 'express';
 import morgan from 'morgan';
 import cors from "cors";
+import readline from 'readline';
 import { updateMedicine, deleteScheduledMedicine, getMedicines } from './dao.mjs';
 
 // init express
 const app = express();
 const port = 3001;
+
+// Notification state
+let shouldNotify = false;
+
+// Setup readline interface to listen for console input
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+rl.on('line', (input) => {
+  if (input.trim().toLowerCase() === 'notify') {
+    shouldNotify = true;
+    console.log('✅ Notification triggered! Will send on next check.');
+  }
+});
 
 // middlewares
 app.use(express.json());
@@ -42,6 +59,21 @@ app.get("/api/plans/:id/scheduled-medicines", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 
+});
+
+// GET /api/notifications/check
+app.get("/api/notifications/check", async (req, res) => {
+  try {
+    if (shouldNotify) {
+      // Reset to false after sending notification
+      shouldNotify = false;
+      res.json({ status: 'yes', message: "TACHIPIRINA" }); //Hard coded tachipirina for demo
+    } else {
+      res.json({ status: 'no' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 // PUT /api/plans/:id_plan/scheduled-medicines/:id_scheduled_medicine

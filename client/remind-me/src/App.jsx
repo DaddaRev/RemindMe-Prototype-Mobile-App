@@ -36,6 +36,6 @@ function App() {
   )
 }
 
-//          <Route path='step3' element={<QR_Scan/>} /> 
+//<Route path='step3' element={<QR_Scan/>} /> 
 
 export default App

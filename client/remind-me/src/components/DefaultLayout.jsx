@@ -1,4 +1,5 @@
 import { Outlet } from 'react-router';
+import Notification from './Notification';
 
 function DefaultLayout() {
     return (
@@ -6,6 +7,7 @@ function DefaultLayout() {
             <div className="screen-content">
                 <div className="app-container">
                     <Outlet />
+                    <Notification />
                 </div>
             </div>
         </div>

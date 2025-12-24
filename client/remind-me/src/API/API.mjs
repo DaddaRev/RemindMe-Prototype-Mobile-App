@@ -98,10 +98,34 @@ const deleteScheduledMedicine = async (planId, scheduledMedicineId) => {
   }
 };
 
+/**
+ * Check for notifications
+ * GET /api/notifications/check
+ * @returns {Promise<Object>} Notification status
+ */
+const checkNotification = async () => {
+  try {
+    const url = `${SERVER_URL}/api/notifications/check`;
+    
+    const response = await fetch(url);
+    
+    if (response.ok) {
+      const result = await response.json();
+      return result;
+    } else {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error('Error checking notifications:', error);
+    throw error;
+  }
+};
+
 const API = { 
   getScheduledMedicines,
   updateScheduledMedicine,
-  deleteScheduledMedicine
+  deleteScheduledMedicine,
+  checkNotification
 };
 export default API;
 
