@@ -12,11 +12,11 @@ function HelpPage() {
     const handleSubmit = () => {
         if (!selected) return;
         setShow(true);
-        //navigate("/");
     }
 
     const onHide = () => {
         setShow(false);
+        navigate("/");
     }
 
     return(

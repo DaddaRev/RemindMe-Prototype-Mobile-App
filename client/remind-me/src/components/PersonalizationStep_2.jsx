@@ -12,6 +12,9 @@ function PersonalizationStep_2() {
     const askForHelp = () => {
         navigate("/help");
     }
+    const nextStep = () => {
+        navigate("/newPlan/step3");
+    }
 
     return(
         <Container>
@@ -52,7 +55,7 @@ function PersonalizationStep_2() {
                     <Button onClick={goBack}>CANCEL OPERATION</Button>
                 </Col>
                 <Col md={4}>
-                    <Button>NEXT</Button>
+                    <Button onClick={nextStep}>NEXT</Button>
                 </Col>
             </Row>
 

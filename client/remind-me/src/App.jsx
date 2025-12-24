@@ -10,6 +10,7 @@ import SchedulePage from './components/SchedulePage'
 import { useState } from 'react'
 import SetupPage from './components/SetupPage'
 import UpdatePage from './components/UpdatePage'
+import QR_Scan from './components/QR_Scan'
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
           <Route index element={<NewPlanPage/>} />
           <Route path="step1" element={<PersonalizationStep_1/>} />
           <Route path="step2" element={<PersonalizationStep_2/>} />
+          <Route path='step3' element={<QR_Scan/>} />
         </Route>
         <Route path="/help" element={<HelpPage/>} />
       </Route>
