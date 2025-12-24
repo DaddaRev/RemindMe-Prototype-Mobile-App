@@ -1,4 +1,4 @@
-const SERVER_URL = "http://localhost:3001";
+const SERVER_URL = ""
 
 /**
  * Get all the medicines of a plan

@@ -12,7 +12,18 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 const corsOptions = {
-  origin: 'http://localhost:5173',
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);  // let non-browser clients pass
+    
+    // let localhost pass
+    if (origin.indexOf('localhost') !== -1) return callback(null, true);
+    
+    // let ngrok domains pass
+    if (origin.indexOf('ngrok') !== -1) return callback(null, true);
+    
+    // block other origins
+    callback(new Error('Not allowed by CORS'));
+  },
   optionsSuccessState: 200,
   credentials: true
 };
@@ -32,7 +43,6 @@ app.get("/api/plans/:id/scheduled-medicines", async (req, res) => {
   }
 
 });
-
 
 // PUT /api/plans/:id_plan/scheduled-medicines/:id_scheduled_medicine
 app.put("/api/plans/:id_plan/scheduled-medicines/:id_scheduled_medicine", async (req, res) => {
