@@ -26,7 +26,6 @@ function HomePage(props) {
     if (location.state?.feedback) {
       setSuccessMsg(location.state.feedback);
       setShowSuccessModal(true);
-      // Puliamo lo state della history per evitare che il modale riappaia se si ricarica la pagina
       window.history.replaceState({}, document.title);
     }
   }, [location]);

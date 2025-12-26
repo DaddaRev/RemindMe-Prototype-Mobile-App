@@ -15,7 +15,7 @@ export function MedicineCard(props) {
       className="mb-3 border-3 medicine-card" 
       style={{ 
         borderColor: '#2D2D2D', 
-        background: '#FFFBF7',
+        background: 'linear-gradient(135deg, #f3e7b8ff 0%, #f3e7b8ff 100%)',
         /* 1. VISIVO: Se non sono in edit mode, mostro la manina */
         cursor: !props.editMode ? 'pointer' : 'default'
       }}
@@ -44,7 +44,6 @@ export function MedicineCard(props) {
                 className="border-3 fw-bold action-btn d-inline-flex align-items-center justify-content-center"
                 style={{ background: 'rgba(254, 254, 254, 1)', borderColor: '#2D2D2D', color: '#1a1a1a', fontSize: '2rem', lineHeight: 1, padding: '0.25rem 0.5rem' }}
               >
-                {/* 4. FIX: class -> className */}
                 <i className="bi bi-pencil-fill text-warning fs-3"></i>
               </Button>
             )}

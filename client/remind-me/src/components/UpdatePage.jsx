@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Button, Form, Alert, Spinner } from 'react-bootstrap';
+import { Container, Button, Form, Alert, Spinner, Row, Col } from 'react-bootstrap';
 import { useNavigate, useLocation, useParams } from 'react-router';
 import API from "../API/API.mjs";
 
@@ -22,7 +22,7 @@ const UpdatePage = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(!passedData); // Carica se non abbiamo dati passati
 
-  // STATI PER I MODALI CUSTOM
+  // Custom modal states
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showTimeModal, setShowTimeModal] = useState(false);
@@ -30,7 +30,7 @@ const UpdatePage = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const [showErrorModal, setShowErrorModal] = useState(false);
 
-  // STATI PER IL TIME PICKER IBRIDO
+  // Picker Time States
   const [pickerTime, setPickerTime] = useState({ h: '08', m: '00' });
   const [viewMode, setViewMode] = useState('scroll');
   const [activeField, setActiveField] = useState(null);
@@ -38,14 +38,12 @@ const UpdatePage = () => {
 
   const [formData, setFormData] = useState(null);
 
-  // FETCH DATA (Gestione Reload Pagina)
   useEffect(() => {
     if (passedData) {
-      // Abbiamo i dati dallo state (navigazione interna)
       initializeForm(passedData);
       setLoading(false);
     } else {
-      // Non abbiamo dati (es. refresh pagina), li scarichiamo
+      // if no data passed, fetch from API
       const loadData = async () => {
         try {
           const meds = await API.getScheduledMedicines(planId);
@@ -81,7 +79,7 @@ const UpdatePage = () => {
 
   const goBackWithFeedback = (msg) => {
     if (fromSchedule) {
-      // Se venivo dallo Schedule, torno lì al giorno specifico
+      // If we came from Schedule, go back there with feedback
       navigate('/schedule', {
         state: {
           feedback: msg,
@@ -89,7 +87,7 @@ const UpdatePage = () => {
         }
       });
     } else {
-      // Altrimenti torno alla Home
+      // Otherwise go back to Home
       navigate('/', { state: { feedback: msg } });
     }
   };
@@ -241,66 +239,101 @@ const UpdatePage = () => {
   return (
     <div className="d-flex flex-column h-100" style={{ backgroundColor: '#F5E6D3', position: 'relative' }}>
 
-      {/* HEADER */}
-      <div className="p-3 d-flex align-items-center justify-content-between">
-        <div className="d-flex align-items-center">
-          <Button variant="link" onClick={() => navigate(-1)} className="text-dark-custom p-0 me-3 text-decoration-none nav-arrow">
-            <span style={{ fontSize: '2.5rem', lineHeight: '0.8', fontWeight: 'bold' }}>←</span>
-          </Button>
-          <h2 className="m-0 fw-bold text-uppercase text-dark-custom" style={{ fontSize: '1.4rem', lineHeight: '1.1' }}>
-            {formData.name}
-          </h2>
-        </div>
+      {/* TOP BAR: Back button styled like HomePage */}
+      <div className="px-3 pt-3 align-self-start" style={{ zIndex: 10 }}>
         <Button
-          variant="outline-dark"
-          className="rounded-circle d-flex align-items-center justify-content-center border-3"
-          style={{ width: '50px', height: '50px', fontSize: '1.5rem', borderColor: '#2D2D2D', color: '#2D2D2D', backgroundColor: '#FFFBF7' }}
-          onClick={handleTopRightAction}
+          className="border-3 fw-bold action-btn"
+          style={{ background: 'rgba(254, 254, 254, 1)', borderColor: '#2D2D2D', color: '#1a1a1a' }}
+          onClick={() => navigate(-1)}
+          aria-label="Back"
         >
-          {isEditing ? '🗑️' : '✏️'}
+          ← Back
         </Button>
       </div>
 
       {/* BODY */}
-      <Container className="py-2 flex-grow-1 overflow-auto no-scrollbar">
+      <Container className="py-3 flex-grow-1 overflow-auto no-scrollbar">
+        {/* Hero presentation: distinct from below cards */}
+        <div className="px-2 mb-2">
+          <div className="border rounded-2 p-4 border-dark" style={{ background: 'linear-gradient(135deg, #FDF6D9 0%, #FCECC1 100%)', boxShadow: '0 3px 12px rgba(224, 175, 101, 0.18)' }}>
+            <Row className="align-items-center">
+              <Col xs={9} sm={9}>
+                <div className="fw-bold text-uppercase text-truncate" style={{ fontSize: '2rem', lineHeight: '1.15', color: '#2D2D2D', letterSpacing: '0.8px', whiteSpace: 'nowrap' }}>
+                  {formData.name}
+                </div>
+              </Col>
+              <Col xs={3} sm={3} className="d-flex justify-content-end">
+                <Button
+                  variant="outline-dark"
+                  className="rounded-circle d-flex align-items-center justify-content-center border-3 fw-bold"
+                  style={{ width: '65px', height: '65px', fontSize: '1.9rem', borderColor: '#2D2D2D', color: '#2D2D2D', backgroundColor: '#FFFBF7', padding: 0 }}
+                  onClick={handleTopRightAction}
+                >
+                  {isEditing ? '🗑️' : '✏️'}
+                </Button>
+              </Col>
+            </Row>
+          </div>
+        </div>
         {!isEditing && (
           // VISTA LETTURA
-          <div className="d-flex flex-column gap-3 px-1 mt-3">
+          <div className="d-flex flex-column gap-3 px-2 py-2">
 
             {/* 1. Time */}
-            <div className="d-flex align-items-center justify-content-between">
-              <div className="label-text w-50">ASSUMPTION<br />TIME:</div>
-              <div className="w-100 ms-2 d-flex align-items-center justify-content-start">
-                <div className="d-flex justify-content-center align-items-center" style={{ width: '45px', marginRight: '8px' }}>
-                  <span style={{ fontSize: '2rem', lineHeight: 1 }}>⏰</span>
-                </div>
-                <div className="fs-1 fw-bold text-dark-custom">{formData.time}</div>
-              </div>
+            <div className="border-3 rounded-2 p-3" style={{ borderColor: '#2D2D2D', background: 'linear-gradient(135deg, #FFFFFF 0%, #FFF8E7 100%)', boxShadow: '0 2px 8px rgba(224, 175, 101, 0.15)' }}>
+              <Row className="align-items-center g-1">
+                <Col xs={4} className="text-center">
+                  <div className="text-uppercase fw-bold" style={{ fontSize: '0.95rem', color: '#3d3d00', letterSpacing: '0.8px', lineHeight: '1.3' }}>Assumption<br />Time</div>
+                </Col>
+                <Col xs={4} className="d-flex justify-content-center">
+                  <div className="d-flex justify-content-center align-items-center" style={{ width: '55px', height: '55px', background: '#FFF9ED', borderRadius: '10px' }}>
+                    <span style={{ fontSize: '2rem', lineHeight: 1 }}>⏰</span>
+                  </div>
+                </Col>
+                <Col xs={4} className="text-center">
+                  <div className="fw-bold" style={{ color: '#2D2D2D', fontSize: '1.8rem', letterSpacing: '1px' }}>{formData.time}</div>
+                </Col>
+              </Row>
             </div>
+
             {/* 2. Modality */}
-            <div className="d-flex align-items-center justify-content-between mt-2">
-              <div className="label-text w-50">ASSUMPTION<br />MODALITY:</div>
-              <div className="w-100 ms-2 d-flex align-items-center justify-content-start">
-                <div className="d-flex justify-content-center align-items-center" style={{ width: '45px', marginRight: '8px' }}>
-                  <span style={{ fontSize: '2rem', lineHeight: 1 }}>{getModalityIcon(formData.modality)}</span>
-                </div>
-                <div className="fs-2 fw-bold text-uppercase text-dark-custom">{formData.modality}</div>
-              </div>
+            <div className="border-3 rounded-2 p-3" style={{ borderColor: '#2D2D2D', background: 'linear-gradient(135deg, #FFFFFF 0%, #FFF8E7 100%)', boxShadow: '0 2px 8px rgba(224, 175, 101, 0.15)' }}>
+              <Row className="align-items-center g-1">
+                <Col xs={4} className="text-center">
+                  <div className="text-uppercase fw-bold" style={{ fontSize: '0.95rem', color: '#3d3d00', letterSpacing: '0.8px', lineHeight: '1.3' }}>Assumption<br />Modality</div>
+                </Col>
+                <Col xs={4} className="d-flex justify-content-center">
+                  <div className="d-flex justify-content-center align-items-center" style={{ width: '55px', height: '55px', background: '#FFF9ED', borderRadius: '10px' }}>
+                    <span style={{ fontSize: '2rem', lineHeight: 1 }}>{getModalityIcon(formData.modality)}</span>
+                  </div>
+                </Col>
+                <Col xs={4} className="text-center">
+                  <div className="fw-bold text-uppercase" style={{ color: '#2D2D2D', fontSize: '1.4rem' }}>{formData.modality}</div>
+                </Col>
+              </Row>
             </div>
+
             {/* 3. Medicine Type */}
-            <div className="d-flex align-items-center justify-content-between mt-2">
-              <div className="label-text">MEDICINE TYPE:</div>
-              <div className="d-flex align-items-center">
-                <div className="edit-field-box justify-content-center bg-white border-3" style={{ width: '80px', padding: '5px', height: '55px', minHeight: 'unset' }}>
-                  <span style={{ fontSize: '2rem' }}>{getMedicineIcon(formData.type)}</span>
-                </div>
-              </div>
+            <div className="border-3 rounded-2 p-3" style={{ borderColor: '#2D2D2D', background: 'linear-gradient(135deg, #FFFFFF 0%, #FFF8E7 100%)', boxShadow: '0 2px 8px rgba(224, 175, 101, 0.15)' }}>
+              <Row className="align-items-center g-1">
+                <Col xs={6} className="text-center">
+                  <div className="text-uppercase fw-bold" style={{ fontSize: '0.95rem', color: '#3d3d00', letterSpacing: '0.8px', lineHeight: '1.3' }}>Medicine<br />Type</div>
+                </Col>
+                <Col xs={6} className="d-flex justify-content-center">
+                  <div className="d-flex justify-content-center align-items-center border-3" style={{ width: '55px', height: '55px', borderColor: '#2D2D2D', background: '#FFF9ED', borderRadius: '10px' }}>
+                    <span style={{ fontSize: '2rem' }}>{getMedicineIcon(formData.type)}</span>
+                  </div>
+                </Col>
+              </Row>
             </div>
-            {/* 4. Description (SPOSTATO IN FONDO) */}
-            <div className="mt-2 w-100">
-              <div className="label-text">DESCRIPTION:</div>
-              <div className="fst-italic fs-5 mt-2 ps-3 border-start border-3 border-dark text-dark-custom" style={{ minHeight: '60px' }}>
-                {formData.description || <span className="text-muted opacity-75">Nessuna descrizione disponibile</span>}
+
+            {/* 4. Description */}
+            <div className="border-3 rounded-2 p-3" style={{ borderColor: '#2D2D2D', background: 'linear-gradient(135deg, #FFFFFF 0%, #FFF8E7 100%)', boxShadow: '0 2px 8px rgba(224, 175, 101, 0.15)' }}>
+              <div className="text-uppercase fw-bold mb-2" style={{ fontSize: '0.95rem', color: '#3d3d00', letterSpacing: '0.8px' }}>
+                Description
+              </div>
+              <div className="fst-italic px-3 py-2 border-start border-3" style={{ minHeight: '60px', fontSize: '1rem', lineHeight: '1.5', color: '#555', borderColor: '#e0af65 !important' }}>
+                {formData.description || <span className="text-muted opacity-75">No description available</span>}
               </div>
             </div>
 
@@ -308,11 +341,11 @@ const UpdatePage = () => {
         )}
 
         {isEditing && (
-          // VISTA MODIFICA
+          // Editing VIEW
           <div className="d-flex flex-column gap-3 px-1 pb-4">
             {/* 1. Time Select */}
             <div className="d-flex align-items-center justify-content-between">
-              <div className="label-text w-50">ASSUMPTION<br />TIME:</div>
+              <div className="label-text w-50">Assumption<br />Time:</div>
               <div className="w-100 ms-2 d-flex align-items-center" onClick={openTimePicker}>
                 <div className="d-flex justify-content-center align-items-center" style={{ width: '45px', flexShrink: 0, marginRight: '8px' }}>
                   <span style={{ fontSize: '2rem', lineHeight: 1 }}>⏰</span>
@@ -331,7 +364,7 @@ const UpdatePage = () => {
             </div>
             {/* 2. Modality Select */}
             <div className="d-flex align-items-center justify-content-between mt-2">
-              <div className="label-text w-50">ASSUMPTION<br />MODALITY:</div>
+              <div className="label-text w-50">Assumption <br />Modality:</div>
               <div className="w-100 ms-2 d-flex align-items-center">
                 <div className="d-flex justify-content-center align-items-center" style={{ width: '45px', flexShrink: 0, marginRight: '8px' }}>
                   <span style={{ fontSize: '2rem', lineHeight: 1 }}>{getModalityIcon(formData.modality)}</span>
@@ -356,7 +389,7 @@ const UpdatePage = () => {
             </div>
             {/* 3. Medicine Type */}
             <div className="d-flex align-items-center justify-content-between mt-2">
-              <div className="label-text">MEDICINE TYPE:</div>
+              <div className="label-text">Medicine Type:</div>
               <div className="d-flex align-items-center">
                 <div className="edit-field-box justify-content-center bg-white" style={{ width: '80px', padding: '5px' }}>
                   <span style={{ fontSize: '2rem' }}>{getMedicineIcon(formData.type)}</span>
@@ -365,7 +398,7 @@ const UpdatePage = () => {
             </div>
             {/* 4. Description */}
             <div className="mt-2 w-100">
-              <div className="label-text mb-1">DESCRIPTION:</div>
+              <div className="label-text mb-1">Description:</div>
               <textarea
                 className="edit-field-box text-start fw-normal align-items-start h-auto w-100"
                 rows="4"
@@ -394,8 +427,19 @@ const UpdatePage = () => {
         )}
       </Container>
 
-      <div className="p-3 mt-auto border-top border-3 border-dark" style={{ backgroundColor: '#F5E6D3' }}>
-        <Button variant="outline-dark" className="w-100 py-2 fs-5 fw-bold btn-thick-border" style={{ borderRadius: '12px' }}>ASK FOR HELP 📞</Button>
+      <div className="action-section p-3 mt-auto border-top border-3 border-dark">
+        <div className="d-flex justify-content-center">
+          <Button 
+            variant="outline-dark" 
+            className="py-2 px-4 fs-5 fw-bold btn-thick-border"
+            style={{ borderRadius: '12px', minWidth: '220px' }}
+          >
+            <div className="d-flex align-items-center justify-content-center gap-3">
+              <span className="text-uppercase">ASK FOR<br />HELP</span>
+              <span><i className="bi bi-telephone-fill text-success fs-3"></i></span>
+            </div>
+          </Button>
+        </div>
       </div>
 
       {showConfirmModal && (
