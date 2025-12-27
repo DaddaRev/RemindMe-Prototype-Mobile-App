@@ -2,7 +2,6 @@ import { Container, Row, Col, Button, ListGroup, Modal } from 'react-bootstrap';
 import { useState } from 'react';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { useNavigate } from 'react-router';
-import BackButton from './BackButton';
 
 function HelpPage() {
     const navigate = useNavigate();
@@ -20,87 +19,110 @@ function HelpPage() {
     }
 
     return(
-        <Container>
-            <Row className="mb-4 mt-3">
-                <Col md={2} className='pt-2 ps-2'>
-                    <BackButton />
-                </Col>
-            </Row>
+        <div className="home-page d-flex flex-column">
+            <div className="px-3 pt-3 align-self-start" style={{ zIndex: 10 }}>
+                <Button
+                    className="border-3 fw-bold action-btn d-inline-flex align-items-center"
+                    style={{ background: 'rgba(254, 254, 254, 1)', borderColor: '#2D2D2D', color: '#1a1a1a', whiteSpace: 'nowrap' }}
+                    onClick={() => navigate(-1)}
+                    aria-label="Back"
+                >
+                    ← Back
+                </Button>
+            </div>
 
-            <Row className='justify-content-center'>
-                <Col md={11} as="h4" className='mb-3 fs-4 text-center bg-white border border-dark border-3 pt-3 pb-3 rounded'>
-                    WHO YOU WANT TO PERFORM THE ACTION FOR YOU?
-                </Col>
-            </Row>
+            <Container fluid className="flex-grow-1 d-flex flex-column px-3 pb-3" style={{ minHeight: 0 }}>
+                <Row className="justify-content-center mt-1">
+                    <Col xs={12} className="mb-4 mt-3">
+                        <div className="text-center bg-white border border-dark border-3 py-4 px-4 rounded fw-bold" style={{ fontSize: '1.15rem', lineHeight: 1.25 }}>
+                            Who you want to perform the action for you?
+                        </div>
+                    </Col>
+                </Row>
 
-            <Row className='mt-3 justify-content-center'>
-                <Col md={11} className="mb-5 text-center">
-                    <ListGroup>
-                        <ListGroup.Item
-                            action
-                            onClick={() => setSelected('DR. SMITH')}
-                            className={`d-flex align-items-center ${selected === 'DR. SMITH' ? 'border border-3 border-dark' : ''}`}
-                        >
-                            <img 
-                                src="/assets/proxy-image.jpg" 
-                                className="rounded-circle me-3"
-                                style={{width: '80px', height: '80px', objectFit: 'cover'}}
-                            />
-                            <div>
-                                <h5>DR. SMITH</h5>
-                            </div>
-                        </ListGroup.Item>
-                        <ListGroup.Item
-                            action
-                            onClick={() => setSelected('DR. ROBERT')}
-                            className={`d-flex align-items-center ${selected === 'DR. ROBERT' ? 'border border-3 border-dark' : ''}`}
-                        >
-                            <img 
-                                src="/assets/proxy-image.jpg" 
-                                className="rounded-circle me-3"
-                                style={{width: '80px', height: '80px', objectFit: 'cover'}}
-                            />
-                            <div>
-                                <h5>DR. ROBERT</h5>
-                            </div>
-                        </ListGroup.Item>
-                        <ListGroup.Item
-                            action
-                            onClick={() => setSelected('BOB')}
-                            className={`d-flex align-items-center ${selected === 'BOB' ? 'border border-3 border-dark' : ''}`}
-                        >
-                            <img 
-                                src="/assets/proxy-image.jpg" 
-                                className="rounded-circle me-3"
-                                style={{width: '80px', height: '80px', objectFit: 'cover'}}
-                            />
-                            <div>
-                                <h5>BOB</h5>
-                            </div>
-                        </ListGroup.Item>
-                        <ListGroup.Item
-                            action
-                            onClick={() => setSelected('CLARK')}
-                            className={`d-flex align-items-center ${selected === 'CLARK' ? 'border border-3 border-dark' : ''}`}
-                        >
-                            <img 
-                                src="/assets/proxy-image.jpg" 
-                                className="rounded-circle me-3"
-                                style={{width: '80px', height: '80px', objectFit: 'cover'}}
-                            />
-                            <div>
-                                <h5>CLARK</h5>
-                            </div>
-                        </ListGroup.Item>
-                    </ListGroup>
-                </Col>
-            </Row>
+                <Row className="justify-content-center flex-grow-1" style={{ minHeight: 0 }}>
+                    <Col xs={12} className="mb-2 text-center d-flex flex-column" style={{ minHeight: 0 }}>
+                        <ListGroup className="shadow-sm flex-grow-1" style={{ minHeight: 0, overflowY: 'auto' }}>
+                            <ListGroup.Item
+                                action
+                                onClick={() => setSelected('DR. SMITH')}
+                                className={`d-flex align-items-center py-3 ${selected === 'DR. SMITH' ? 'border border-3 border-dark' : 'border border-2 border-dark-subtle'}`}
+                            >
+                                <img 
+                                    src="/assets/proxy-image.jpg" 
+                                    className="rounded-circle me-3"
+                                    style={{width: '72px', height: '72px', objectFit: 'cover'}}
+                                />
+                                <div className="text-start">
+                                    <h5 className="mb-0 fw-bold">DR. SMITH</h5>
+                                    <small className="text-muted">Primary physician</small>
+                                </div>
+                            </ListGroup.Item>
+                            <ListGroup.Item
+                                action
+                                onClick={() => setSelected('DR. ROBERT')}
+                                className={`d-flex align-items-center py-3 ${selected === 'DR. ROBERT' ? 'border border-3 border-dark' : 'border border-2 border-dark-subtle'}`}
+                            >
+                                <img 
+                                    src="/assets/proxy-image.jpg" 
+                                    className="rounded-circle me-3"
+                                    style={{width: '72px', height: '72px', objectFit: 'cover'}}
+                                />
+                                <div className="text-start">
+                                    <h5 className="mb-0 fw-bold">DR. ROBERT</h5>
+                                    <small className="text-muted">Cardiologist</small>
+                                </div>
+                            </ListGroup.Item>
+                            <ListGroup.Item
+                                action
+                                onClick={() => setSelected('BOB')}
+                                className={`d-flex align-items-center py-3 ${selected === 'BOB' ? 'border border-3 border-dark' : 'border border-2 border-dark-subtle'}`}
+                            >
+                                <img 
+                                    src="/assets/proxy-image.jpg" 
+                                    className="rounded-circle me-3"
+                                    style={{width: '72px', height: '72px', objectFit: 'cover'}}
+                                />
+                                <div className="text-start">
+                                    <h5 className="mb-0 fw-bold">BOB</h5>
+                                    <small className="text-muted">Neighbor</small>
+                                </div>
+                            </ListGroup.Item>
+                            <ListGroup.Item
+                                action
+                                onClick={() => setSelected('CLARK')}
+                                className={`d-flex align-items-center py-3 ${selected === 'CLARK' ? 'border border-3 border-dark' : 'border border-2 border-dark-subtle'}`}
+                            >
+                                <img 
+                                    src="/assets/proxy-image.jpg" 
+                                    className="rounded-circle me-3"
+                                    style={{width: '72px', height: '72px', objectFit: 'cover'}}
+                                />
+                                <div className="text-start">
+                                    <h5 className="mb-0 fw-bold">CLARK</h5>
+                                    <small className="text-muted">Friend</small>
+                                </div>
+                            </ListGroup.Item>
+                        </ListGroup>
+                    </Col>
+                </Row>
+            </Container>
 
-            <Row className='mt-5 justify-content-center border-top border-2 border-dark pt-3'>
-                <Col className='text-center'>
-                    <Button className="btn-success" size='lg' disabled={!selected} onClick={handleSubmit}>ASK FOR HELP <i className="bi bi-telephone ms-3"></i></Button>
-                </Col>
-            </Row>
+            <div className="action-section border-top border-3 border-dark mt-auto">
+                <Container className="py-3">
+                    <Button
+                        className="w-100 py-3 border-3 fw-bold action-btn"
+                        style={{ background: 'rgba(254, 254, 254, 1)', borderColor: '#2D2D2D', color: '#1a1a1a' }}
+                        disabled={!selected}
+                        onClick={handleSubmit}
+                    >
+                        <div className="d-flex align-items-center justify-content-center gap-3">
+                            <span>ASK FOR HELP</span>
+                            <span><i className="bi bi-telephone-fill text-success fs-3"></i></span>
+                        </div>
+                    </Button>
+                </Container>
+            </div>
 
             <Modal
                 show={show}
@@ -113,12 +135,18 @@ function HelpPage() {
                 ONCE <strong>{selected}</strong> HAS COMPLETED YOUR PLAN YOU WILL BE NOTIFIED!
                 </Modal.Body>
                 <Modal.Footer className="d-flex justify-content-center">
-                <Button size="lg" variant="primary" onClick={onHide}>
+                <Button
+                    size="lg"
+                    className="border-3 fw-bold action-btn d-inline-flex align-items-center"
+                    style={{ background: 'rgba(236, 241, 139, 1)', borderColor: '#2D2D2D', color: '#1a1a1a', whiteSpace: 'nowrap' }}
+                    onClick={onHide}
+                    aria-label="OK"
+                >
                     OK
                 </Button>
                 </Modal.Footer>
             </Modal>
-        </Container>
+        </div>
     );
 }
 
