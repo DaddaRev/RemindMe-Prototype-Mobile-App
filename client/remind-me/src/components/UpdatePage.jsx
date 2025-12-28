@@ -3,21 +3,19 @@ import { Container, Button, Form, Alert, Spinner } from 'react-bootstrap';
 import { useNavigate, useLocation, useParams } from 'react-router';
 import API from "../API/API.mjs";
 
-const UpdatePage = () => {
+const UpdatePage = (props) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { planId, medicineId } = useParams(); // Prende gli ID dall'URL
 
   // Recupera dati passati dalla Home o null se accesso diretto
   const passedData = location.state?.medicine;
-  const autoEdit = location.state?.autoEdit || false; // Se true, parte in edit mode
 
   const fromSchedule = location.state?.fromSchedule || false;
   const originalDayOffset = location.state?.dayOffset || 1;
 
-  // Se autoEdit è true, partiamo subito in editing (Flusso "Update Plan")
-  // Altrimenti partiamo in false (Flusso "Info/Lettura")
-  const [isEditing, setIsEditing] = useState(autoEdit);
+  const autoEdit = location.state?.autoEdit || false;
+  const [startedInEditMode] = useState(autoEdit); // Store initial edit mode state
 
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(!passedData); // Carica se non abbiamo dati passati
@@ -37,6 +35,13 @@ const UpdatePage = () => {
   const [inputBuffer, setInputBuffer] = useState('');
 
   const [formData, setFormData] = useState(null);
+
+  // NEW: Initialize edit mode based on autoEdit
+  useEffect(() => {
+    if (autoEdit && !props.editMode) {
+      props.setEditMode(true);
+    }
+  }, [autoEdit, props]);  
 
   // FETCH DATA (Gestione Reload Pagina)
   useEffect(() => {
@@ -80,8 +85,22 @@ const UpdatePage = () => {
   };
 
   const goBackWithFeedback = (msg) => {
+    // If we started in non-edit mode but are currently in edit mode
+    // we should just exit edit mode and stay on this page
+    if (!startedInEditMode && props.editMode) {
+      props.setEditMode(false);
+      return; // Stay on the page, just exit edit mode
+    }
+
+    // Otherwise, navigate back to the previous page
     if (fromSchedule) {
-      // Se venivo dallo Schedule, torno lì al giorno specifico
+      // Restore the edit mode state of the previous page
+      if (startedInEditMode) {
+        props.setEditMode(true);
+      } else {
+        props.setEditMode(false);
+      }
+      
       navigate('/schedule', {
         state: {
           feedback: msg,
@@ -89,7 +108,13 @@ const UpdatePage = () => {
         }
       });
     } else {
-      // Altrimenti torno alla Home
+      // For home page
+      if (startedInEditMode) {
+        props.setEditMode(true);
+      } else {
+        props.setEditMode(false);
+      }
+      
       navigate('/', { state: { feedback: msg } });
     }
   };
@@ -193,7 +218,7 @@ const UpdatePage = () => {
       await API.updateScheduledMedicine(planId, formData.id_sched_med, apiData);
 
       setShowConfirmModal(false);
-      setIsEditing(false);
+      props.setEditMode(false);
 
       // Successo: Torna indietro col messaggio
       goBackWithFeedback('Changes saved successfully!');
@@ -223,12 +248,12 @@ const UpdatePage = () => {
   };
 
   const handleTopRightAction = () => {
-    if (isEditing) {
+    if (props.editMode) {
       // MODALITA' EDIT: Il tasto è un cestino -> APRI MODALE DELETE
       setShowDeleteModal(true);
     } else {
       // MODALITA' LETTURA: Il tasto è una matita -> ATTIVA MODIFICA
-      setIsEditing(true);
+      props.setEditMode(true);
     }
   };
 
@@ -241,10 +266,11 @@ const UpdatePage = () => {
   return (
     <div className="d-flex flex-column h-100" style={{ backgroundColor: '#F5E6D3', position: 'relative' }}>
 
+      {/* TODO: sistemare il back button */}
       {/* HEADER */}
       <div className="p-3 d-flex align-items-center justify-content-between">
         <div className="d-flex align-items-center">
-          <Button variant="link" onClick={() => navigate(-1)} className="text-dark-custom p-0 me-3 text-decoration-none nav-arrow">
+          <Button variant="link" onClick={() => goBackWithFeedback()} className="text-dark-custom p-0 me-3 text-decoration-none nav-arrow">
             <span style={{ fontSize: '2.5rem', lineHeight: '0.8', fontWeight: 'bold' }}>←</span>
           </Button>
           <h2 className="m-0 fw-bold text-uppercase text-dark-custom" style={{ fontSize: '1.4rem', lineHeight: '1.1' }}>
@@ -257,13 +283,13 @@ const UpdatePage = () => {
           style={{ width: '50px', height: '50px', fontSize: '1.5rem', borderColor: '#2D2D2D', color: '#2D2D2D', backgroundColor: '#FFFBF7' }}
           onClick={handleTopRightAction}
         >
-          {isEditing ? '🗑️' : '✏️'}
+          {props.editMode ? '🗑️' : '✏️'}
         </Button>
       </div>
 
       {/* BODY */}
       <Container className="py-2 flex-grow-1 overflow-auto no-scrollbar">
-        {!isEditing && (
+        {!props.editMode && (
           // VISTA LETTURA
           <div className="d-flex flex-column gap-3 px-1 mt-3">
 
@@ -307,7 +333,7 @@ const UpdatePage = () => {
           </div>
         )}
 
-        {isEditing && (
+        {props.editMode && (
           // VISTA MODIFICA
           <div className="d-flex flex-column gap-3 px-1 pb-4">
             {/* 1. Time Select */}

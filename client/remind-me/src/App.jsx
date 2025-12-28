@@ -22,7 +22,7 @@ function App() {
     <Routes>
       <Route element={<DefaultLayout/>}>
         <Route path="/" element={hasPlan ? <HomePage editMode={editMode} toggleEditMode={toggleEditMode}/> : <Navigate replace to= "/setup" />} />
-        <Route path="/plans/:planId/scheduled/:medicineId" element={<UpdatePage />} />
+        <Route path="/plans/:planId/scheduled/:medicineId" element={<UpdatePage editMode={editMode} setEditMode={setEditMode} toggleEditMode={toggleEditMode}/>} />
         <Route path="/schedule" element={<SchedulePage editMode={editMode} toggleEditMode={toggleEditMode}/>} />
         <Route path="/setup" element={!hasPlan ? <SetupPage/> : <Navigate replace to ="/" />}></Route>
         <Route path="/newPlan">
