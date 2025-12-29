@@ -4,12 +4,10 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import { useNavigate } from 'react-router';
 import BackButton from './BackButton';
 
-function PersonalizationStep_1() {
-    const [morning, setMorning] = useState(null); // '7-10' | '10-13' | null
-    const [afternoon, setAfternoon] = useState(null); // '13-16' | '16-19' | null
-    const [evening, setEvening] = useState(null); // '19-22' | '22-01' | null
+function PersonalizationStep_1(props) {
 
-    const hasAnySelection = Boolean(morning || afternoon || evening);
+
+    const hasAnySelection = Boolean(props.morning || props.afternoon || props.evening);
     const navigate = useNavigate();
 
     const goBack = () => {
@@ -47,8 +45,8 @@ function PersonalizationStep_1() {
                     <Button
                         size='lg'
                         className='fw-bold'
-                        variant={morning === '7-10' ? 'outline-primary' : 'outline-secondary'}
-                        onClick={() => setMorning(morning === '7-10' ? null : '7-10')}
+                        variant={props.morning === '7-10' ? 'outline-primary' : 'outline-secondary'}
+                        onClick={() => props.setMorning(props.morning === '7-10' ? null : '7-10')}
                     >
                         7:00-10:00
                     </Button>
@@ -57,8 +55,8 @@ function PersonalizationStep_1() {
                     <Button
                         size='lg'
                         className='fw-bold'
-                        variant={morning === '10-13' ? 'outline-primary' : 'outline-secondary'}
-                        onClick={() => setMorning(morning === '10-13' ? null : '10-13')}
+                        variant={props.morning === '10-13' ? 'outline-primary' : 'outline-secondary'}
+                        onClick={() => props.setMorning(props.morning === '10-13' ? null : '10-13')}
                     >
                         10:00-13:00
                     </Button>
@@ -72,8 +70,8 @@ function PersonalizationStep_1() {
                     <Button
                         size='lg'
                         className='fw-bold'
-                        variant={afternoon === '13-16' ? 'outline-primary' : 'outline-secondary'}
-                        onClick={() => setAfternoon(afternoon === '13-16' ? null : '13-16')}
+                        variant={props.afternoon === '13-16' ? 'outline-primary' : 'outline-secondary'}
+                        onClick={() => props.setAfternoon(props.afternoon === '13-16' ? null : '13-16')}
                     >
                         13:00-16:00
                     </Button>
@@ -82,8 +80,8 @@ function PersonalizationStep_1() {
                     <Button
                         size='lg'
                         className='fw-bold'
-                        variant={afternoon === '16-19' ? 'outline-primary' : 'outline-secondary'}
-                        onClick={() => setAfternoon(afternoon === '16-19' ? null : '16-19')}
+                        variant={props.afternoon === '16-19' ? 'outline-primary' : 'outline-secondary'}
+                        onClick={() => props.setAfternoon(props.afternoon === '16-19' ? null : '16-19')}
                     >
                         16:00-19:00
                     </Button>
@@ -97,8 +95,8 @@ function PersonalizationStep_1() {
                     <Button
                         size='lg'
                         className='fw-bold'
-                        variant={evening === '19-22' ? 'outline-primary' : 'outline-secondary'}
-                        onClick={() => setEvening(evening === '19-22' ? null : '19-22')}
+                        variant={props.evening === '19-22' ? 'outline-primary' : 'outline-secondary'}
+                        onClick={() => props.setEvening(props.evening === '19-22' ? null : '19-22')}
                     >
                         19:00-22:00
                     </Button>
@@ -107,8 +105,8 @@ function PersonalizationStep_1() {
                     <Button
                         size='lg'
                         className='fw-bold'
-                        variant={evening === '22-01' ? 'outline-primary' : 'outline-secondary'}
-                        onClick={() => setEvening(evening === '22-01' ? null : '22-01')}
+                        variant={props.evening === '22-01' ? 'outline-primary' : 'outline-secondary'}
+                        onClick={() => props.setEvening(props.evening === '22-01' ? null : '22-01')}
                     >
                         22:00-01:00
                     </Button>

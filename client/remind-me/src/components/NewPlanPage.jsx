@@ -17,7 +17,7 @@ function NewPlanPage() {
     }
 
     const skip = () => {
-        navigate("/");
+        navigate("/newPlan/step3");
     }
 
     const askForHelp = () => {

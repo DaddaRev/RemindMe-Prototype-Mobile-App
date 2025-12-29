@@ -282,21 +282,21 @@ const UpdatePage = (props) => {
           ← Back
         </Button>
         <Button
-          variant={isEditing ? 'outline-danger' : 'outline-dark'}
+          variant={props.editMode ? 'outline-danger' : 'outline-dark'}
           className="d-inline-flex align-items-center justify-content-center border-3 fw-bold"
           style={{
-            minWidth: isEditing ? '92px' : '60px',
+            minWidth: props.editMode ? '92px' : '60px',
             height: '52px',
             fontSize: '1.05rem',
-            borderColor: isEditing ? '#d9534f' : '#2D2D2D',
-            color: isEditing ? '#a21111' : '#2D2D2D',
-            backgroundColor: isEditing ? '#fff5f5' : '#FFFBF7',
-            gap: isEditing ? '8px' : '0px',
-            paddingInline: isEditing ? '14px' : '10px',
+            borderColor: props.editMode ? '#d9534f' : '#2D2D2D',
+            color: props.editMode ? '#a21111' : '#2D2D2D',
+            backgroundColor: props.editMode ? '#fff5f5' : '#FFFBF7',
+            gap: props.editMode ? '8px' : '0px',
+            paddingInline: props.editMode ? '14px' : '10px',
             marginTop: '2px'
           }}
           onClick={handleTopRightAction}
-          aria-label={isEditing ? 'Delete medicine' : 'Edit medicine'}
+          aria-label={props.editMode ? 'Delete medicine' : 'Edit medicine'}
         >
           {props.editMode ? '🗑️' : '✏️'}
         </Button>

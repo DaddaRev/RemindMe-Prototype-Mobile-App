@@ -179,7 +179,7 @@ function HomePage(props) {
                 <Button
                   className="w-100 py-3 border-3 fw-bold action-btn"
                   style={{ background: 'rgba(242, 238, 238, 1)', borderColor: '#2D2D2D', color: '#000000ff' }}
-                  /* onClick={() => navigate('/plans/new')} */
+                  onClick={() => navigate('/newPlan')}
                 >
                   <div className="d-flex align-items-center justify-content-center gap-4">
                     <span>NEW<br />PLAN</span>

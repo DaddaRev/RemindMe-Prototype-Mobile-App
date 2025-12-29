@@ -4,15 +4,50 @@ import BackButton from "./BackButton";
 import { useNavigate } from 'react-router';
 
 
-function QR_Scan() {
+function QR_Scan(props) {
   const videoRef = useRef(null);
   const [inputText, setInputText] = useState("");
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
 
+  const determinePlanId = () => {
+    if (props.morning == "7-10") {
+      if (props.afternoon == "13-16") {
+        if (props.planId === 1) {
+          return 2;
+        } else {
+          return 1;
+        }
+      } else {
+        if (props.planId === 3) {
+          return 4;
+        } else {
+          return 3;
+        }      
+      }
+    } else {
+      if (props.afternoon == "13-16") {
+        if (props.planId === 5) {
+          return 6;
+        } else {
+          return 5;
+        }
+      } else {
+        if (props.planId === 7) {
+          return 8;
+        } else {
+          return 7;
+        }
+      }
+    }
+  };
+
 
   const handleSubmit = () => {
-      setShow(true);
+    const newPlanId = determinePlanId();
+    props.setPlanId(newPlanId);
+    props.setHasPlan(true);
+    setShow(true);
   }
 
   const onHide = () => {
