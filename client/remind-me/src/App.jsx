@@ -15,7 +15,7 @@ import QR_Scan from './components/QR_Scan'
 function App() {
 
   const [editMode, setEditMode] = useState(false);
-  const [hasPlan, setHasPlan] = useState(false);
+  const [hasPlan, setHasPlan] = useState(true);
   const toggleEditMode = () => setEditMode(prev => !prev);
 
   //plan personalization states

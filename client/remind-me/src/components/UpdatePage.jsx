@@ -300,7 +300,7 @@ const UpdatePage = (props) => {
           onClick={handleTopRightAction}
           aria-label={props.editMode ? 'Delete medicine' : 'Edit medicine'}
         >
-          {props.editMode ? '❌' : '✏️'}
+          {props.editMode ? 'DELETE' : '✏️'}
         </Button>
       </div>
 
@@ -319,7 +319,7 @@ const UpdatePage = (props) => {
           </div>
         </div>
         {!props.editMode && (
-          // VISTA LETTURA
+          // READING VIEW
           <div className="d-flex flex-column gap-3 px-2 py-2">
 
             {/* 1. Time */}
@@ -373,7 +373,7 @@ const UpdatePage = (props) => {
           // VISTA MODIFICA
           <div className="d-flex flex-column gap-3 px-1 pb-4">
             {/* 1. Time Select */}
-            <div className="d-flex align-items-center justify-content-between">
+            <div className="d-flex align-items-center justify-content-between mt-4">
               <div className="label-text w-50" style={{ fontSize: '0.98rem', lineHeight: '1.25', textTransform: 'none', color: '#3c3124' }}>{t('updatePage.assumptionTime')}:</div>
               <div className="w-100 ms-2 d-flex align-items-center" onClick={openTimePicker}>
                 <div className="d-flex justify-content-center align-items-center" style={{ width: '45px', flexShrink: 0, marginRight: '8px' }}>

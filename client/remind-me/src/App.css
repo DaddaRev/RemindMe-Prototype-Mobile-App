@@ -398,6 +398,25 @@ body {
   letter-spacing: 0.06em;
 }
 
+/* New Plan Page */
+.new-plan-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: clamp(1.8rem, 5vw, 2rem);
+  font-weight: 800;
+  line-height: 1.7;
+  width: 100%;
+  text-align: center;
+}
+
+.new-plan-title::after {
+  content: '🗓️';
+  font-size: 0.85em;
+  line-height: 1;
+}
+
 .setup-new-plan-btn:hover {
   filter: brightness(1.05);
   transform: translateY(-2px);
@@ -522,6 +541,11 @@ input:checked+.slider:before {
 .btn-thick-border:active {
   box-shadow: none;
   transform: translateY(2px);
+}
+
+.btn-thick-border:hover {
+  background-color: #FFFBF7 !important;
+  color: #2D2D2D !important;
 }
 
 /* --- MODALE CUSTOM (Overlay) --- */

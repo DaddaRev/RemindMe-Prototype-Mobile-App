@@ -1,8 +1,10 @@
 import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 function BackButton({ fallback = '/', onClick, ...props }) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleBack = (e) => {
     onClick?.(e);
@@ -13,8 +15,14 @@ function BackButton({ fallback = '/', onClick, ...props }) {
   };
 
   return (
-    <Button className="btn-dark" size="lg" onClick={handleBack} {...props}>
-      <i className="bi bi-arrow-left" aria-hidden="true"></i>
+    <Button
+      className="border-3 fw-bold action-btn"
+      style={{ background: 'rgba(254, 254, 254, 1)', borderColor: '#2D2D2D', color: '#1a1a1a' }}
+      onClick={handleBack}
+      aria-label={t('navigation.back')}
+      {...props}
+    >
+      ← {t('navigation.back')}
     </Button>
   );
 }

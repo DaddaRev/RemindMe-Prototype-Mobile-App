@@ -1,4 +1,4 @@
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Container, Row, Col, Button, Card } from 'react-bootstrap';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { useState } from 'react';
 import InfoPlanModal from './InfoPlanModal';
@@ -27,49 +27,92 @@ function NewPlanPage() {
     }
 
     return(
-        <Container>
-            <Row className="mb-4 mt-3">
-                <Col md={2} className='pt-2 ps-2'>
-                    <BackButton />
-                </Col>
-            </Row>
+        <div className="home-page d-flex flex-column">
+            {/* Back button */}
+            <div className="px-3 pt-3 align-self-start" style={{ zIndex: 10 }}>
+                <BackButton />
+            </div>
 
-            <Row className='justify-content-center'>
-                <Col as="h1" md={11} className='mb-5 text-center'>
-                    {t('newPlanPage.title')}
-                </Col>
-                <Col as="p" md={10} className='fs-4 text-center bg-white border border-dark border-3 pt-3 pb-3 rounded'>
-                    {t('newPlanPage.description')}
-                </Col>
-            </Row>
+            {/* Header with title */}
+            <div className="home-header mt-3 px-3">
+                <Card className="border-3 border-dark rounded home-card" style={{ backgroundColor: '#FFF9E6' }}>
+                    <Card.Body className="p-3 d-flex justify-content-center">
+                        <h1 className='new-plan-title mb-0'>
+                            {t('newPlanPage.title')}
+                        </h1>
+                    </Card.Body>
+                </Card>
+            </div>
 
-            <Row className='justify-content-center'>
-                <Col md={6} className='mt-5 mb-4 text-center'>
-                    <Button size='lg' onClick={startPersonalizing}>OK</Button>
-                </Col>
-            </Row>
-            <Row className='justify-content-center'>
-                <Col md={8} className='mb-4 text-center'>
-                    <Button size='lg' onClick={skip}>{t('newPlanPage.skipStep')}</Button>
-                </Col>
-            </Row>
+            {/* Main content area */}
+            <div className="medicines-list flex-grow-1 overflow-auto py-3">
+                <Container className="d-flex flex-column justify-content-evenly h-100">
+                    <Row className='justify-content-center mb-2 mt-2'>
+                        <Col md={10} className='fs-5 text-center pt-2 pb-2 rounded'>
+                            {t('newPlanPage.description')}
+                        </Col>
+                    </Row>
 
-            <Row className='justify-content-center'>
-                <Col md={3} className='ms-3 mt-4 mb-5 text-center'>
-                    <Button size='lg' className='rounded-circle d-flex align-items-center justify-content-center' onClick={handleShow}>
-                        <i className="bi bi-info-circle"></i>
+                    <Row className='justify-content-center ml-1 mr-1 mt-5 mb-4'>
+                        <Col md={10} className='text-center'>
+                            <Button
+                                variant=""
+                                className="w-100 py-3 border-3 fw-bold"
+                                size='lg'
+                                style={{ backgroundColor: '#d6eea6ff', borderColor: '#2D2D2D', color: '#000000', borderRadius: '12px' }}
+                                onClick={startPersonalizing}
+                            >
+                                OK
+                            </Button>
+                        </Col>
+                    </Row>
+
+                    <Row className='justify-content-center mb-5'>
+                        <Col md={10} className='text-center'>
+                            <Button
+                                variant=""
+                                className="w-100 py-3 border-3 fw-bold"
+                                size='lg'
+                                style={{ backgroundColor: '#FFF9E6', borderColor: '#2D2D2D', color: '#000000', borderRadius: '12px' }}
+                                onClick={skip}
+                            >
+                                {t('newPlanPage.skipStep')}
+                            </Button>
+                        </Col>
+                    </Row>
+
+                    <Row className='justify-content-center'>
+                        <Col className='text-center'>
+                            <Button size='lg' className='rounded-circle d-flex align-items-center justify-content-center btn-thick-border mx-auto'
+                                style={{ width: '54px', height: '54px' }}
+                                onClick={handleShow}>
+                                <i className="bi bi-info-circle"></i>
+                            </Button>
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
+
+            {/* Action section */}
+            <div className='action-section border-top border-3 border-dark'>
+                <Container className='py-3'>
+                    <Button
+                        className="w-100 py-3 border-3 fw-bold action-btn"
+                        size='lg'
+                        style={{ background: 'rgba(255, 255, 255, 1)', borderColor: '#2D2D2D', color: '#1a1a1a' }}
+                        onClick={askForHelp}
+                    >
+                        <div className="d-flex align-items-center justify-content-center gap-4">
+                            <span>{t('helpPage.askForHelp')}</span>
+                            <span><i className="bi bi-telephone-fill text-success fs-3"></i></span>
+                        </div>
                     </Button>
-                </Col>
-            </Row>
+                </Container>
+            </div>
 
-            <Row className='mt-2 pt-3 justify-content-center border-top border-2 border-dark'>
-                <Col md={8} className='text-center'>
-                    <Button className="btn-success" size='lg' onClick={askForHelp}>{t('helpPage.askForHelp')} <i className="bi bi-telephone ms-3"></i></Button>
-                </Col>
-            </Row>
             <InfoPlanModal show={show} onHide={() => setShow(false)} />
             <Outlet />
-        </Container>
+        </div>
     );
 }
 
