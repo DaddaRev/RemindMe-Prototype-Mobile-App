@@ -300,12 +300,24 @@ const UpdatePage = (props) => {
           onClick={handleTopRightAction}
           aria-label={props.editMode ? 'Delete medicine' : 'Edit medicine'}
         >
-          {props.editMode ? '🗑️' : '✏️'}
+          {props.editMode ? '❌' : '✏️'}
         </Button>
       </div>
 
       {/* BODY */}
-      <Container className="py-2 flex-grow-1 overflow-auto no-scrollbar">
+      <Container className="py-3 flex-grow-1 overflow-auto no-scrollbar">
+        {/* Hero presentation: distinct from below cards */}
+        <div className="px-2 mb-2">
+          <div className="border rounded-2 p-4 border-dark" style={{ background: 'linear-gradient(135deg, #FDF6D9 0%, #FCECC1 100%)', boxShadow: '0 3px 12px rgba(224, 175, 101, 0.18)' }}>
+            <Row className="align-items-center">
+              <Col xs={12}>
+                <div className="fw-bold text-uppercase text-truncate text-center" style={{ fontSize: '1.85rem', lineHeight: '1.2', color: '#2D2D2D', letterSpacing: '0.8px', whiteSpace: 'nowrap' }}>
+                  {formData.name}
+                </div>
+              </Col>
+            </Row>
+          </div>
+        </div>
         {!props.editMode && (
           // VISTA LETTURA
           <div className="d-flex flex-column gap-3 px-2 py-2">
