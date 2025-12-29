@@ -1,4 +1,11 @@
 {
+  "type": "module",
+  "scripts": {
+    "start": "node index.mjs",
+    "db:snapshot": "node scripts/db-snapshot.mjs",
+    "db:reset": "node scripts/db-reset.mjs",
+    "start:clean": "node scripts/db-reset.mjs && node index.mjs"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "dayjs": "^1.11.19",
