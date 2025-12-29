@@ -3,6 +3,7 @@ import morgan from 'morgan';
 import cors from "cors";
 import readline from 'readline';
 import { updateMedicine, deleteScheduledMedicine, getMedicines } from './dao.mjs';
+import { translateDayEngToIta } from './utils.mjs';
 
 // init express
 const app = express();
@@ -50,7 +51,8 @@ app.use(cors(corsOptions));
 // GET /api/plans/:id/scheduled-medicines/?day
 app.get("/api/plans/:id/scheduled-medicines", async (req, res) => {
   const planId = req.params.id;
-  const day = req.query.day;
+  const dayEng = req.query.day;
+  const day = translateDayEngToIta(dayEng);
 
   try {
     const scheduledMedicines = await getMedicines(planId, day);
