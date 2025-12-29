@@ -1,7 +1,10 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { useTranslation } from 'react-i18next';
 
 function InfoPlanModal(props) {
+  const { t } = useTranslation();
+  
   return (
       <Modal
         show={props.show}
@@ -11,14 +14,14 @@ function InfoPlanModal(props) {
         size="sm"
       >
         <Modal.Header>
-          <Modal.Title className='w-100 text-center'>Information on plan</Modal.Title>
+          <Modal.Title className='w-100 text-center'>{t('infoPlanModal.title')}</Modal.Title>
         </Modal.Header>
         <Modal.Body className='text-center fs-5'>
-          Plan is used for gathering together the medicines you need to take during the week with their intake times.
+          {t('infoPlanModal.body')}
         </Modal.Body>
         <Modal.Footer className="d-flex justify-content-center">
           <Button variant="primary" onClick={props.onHide}>
-            Understood
+            {t('infoPlanModal.understood')}
           </Button>
         </Modal.Footer>
       </Modal>

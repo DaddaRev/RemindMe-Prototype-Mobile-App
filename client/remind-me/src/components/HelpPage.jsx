@@ -2,8 +2,10 @@ import { Container, Row, Col, Button, ListGroup, Modal } from 'react-bootstrap';
 import { useState } from 'react';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { useNavigate } from 'react-router';
+import { useTranslation } from 'react-i18next';
 
 function HelpPage() {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [selected, setSelected] = useState(null);
     const [show, setShow] = useState(false);
@@ -25,9 +27,9 @@ function HelpPage() {
                     className="border-3 fw-bold action-btn d-inline-flex align-items-center"
                     style={{ background: 'rgba(254, 254, 254, 1)', borderColor: '#2D2D2D', color: '#1a1a1a', whiteSpace: 'nowrap' }}
                     onClick={() => navigate(-1)}
-                    aria-label="Back"
+                    aria-label={t('back')}
                 >
-                    ← Back
+                    ← {t('back')}
                 </Button>
             </div>
 
@@ -35,7 +37,7 @@ function HelpPage() {
                 <Row className="justify-content-center mt-1">
                     <Col xs={12} className="mb-4 mt-3">
                         <div className="text-center bg-white border border-dark border-3 py-4 px-4 rounded fw-bold" style={{ fontSize: '1.15rem', lineHeight: 1.25 }}>
-                            Who you want to perform the action for you?
+                            {t('helpPage.question')}
                         </div>
                     </Col>
                 </Row>
@@ -55,7 +57,7 @@ function HelpPage() {
                                 />
                                 <div className="text-start">
                                     <h5 className="mb-0 fw-bold">DR. SMITH</h5>
-                                    <small className="text-muted">Primary physician</small>
+                                    <small className="text-muted">{t('helpPage.primaryPhysician')}</small>
                                 </div>
                             </ListGroup.Item>
                             <ListGroup.Item
@@ -70,7 +72,7 @@ function HelpPage() {
                                 />
                                 <div className="text-start">
                                     <h5 className="mb-0 fw-bold">DR. ROBERT</h5>
-                                    <small className="text-muted">Cardiologist</small>
+                                    <small className="text-muted">{t('helpPage.cardiologist')}</small>
                                 </div>
                             </ListGroup.Item>
                             <ListGroup.Item
@@ -85,7 +87,7 @@ function HelpPage() {
                                 />
                                 <div className="text-start">
                                     <h5 className="mb-0 fw-bold">BOB</h5>
-                                    <small className="text-muted">Neighbor</small>
+                                    <small className="text-muted">{t('helpPage.neighbor')}</small>
                                 </div>
                             </ListGroup.Item>
                             <ListGroup.Item
@@ -100,7 +102,7 @@ function HelpPage() {
                                 />
                                 <div className="text-start">
                                     <h5 className="mb-0 fw-bold">CLARK</h5>
-                                    <small className="text-muted">Friend</small>
+                                    <small className="text-muted">{t('helpPage.friend')}</small>
                                 </div>
                             </ListGroup.Item>
                         </ListGroup>
@@ -117,7 +119,7 @@ function HelpPage() {
                         onClick={handleSubmit}
                     >
                         <div className="d-flex align-items-center justify-content-center gap-3">
-                            <span>ASK FOR HELP</span>
+                            <span>{t('helpPage.askForHelp')}</span>
                             <span><i className="bi bi-telephone-fill text-success fs-3"></i></span>
                         </div>
                     </Button>
@@ -132,7 +134,7 @@ function HelpPage() {
                 size="sm"
             >
                 <Modal.Body className='fs-5 text-center'>
-                ONCE <strong>{selected}</strong> HAS COMPLETED YOUR PLAN YOU WILL BE NOTIFIED!
+                {t('helpPage.notificationMessage', { name: selected })}
                 </Modal.Body>
                 <Modal.Footer className="d-flex justify-content-center">
                 <Button

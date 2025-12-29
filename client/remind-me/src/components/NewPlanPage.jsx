@@ -4,11 +4,13 @@ import { useState } from 'react';
 import InfoPlanModal from './InfoPlanModal';
 import { Outlet, useNavigate } from 'react-router';
 import BackButton from './BackButton';
+import { useTranslation } from 'react-i18next';
 
 
 function NewPlanPage() {
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
+    const { t } = useTranslation();
 
     const navigate = useNavigate();
 
@@ -34,10 +36,10 @@ function NewPlanPage() {
 
             <Row className='justify-content-center'>
                 <Col as="h1" md={11} className='mb-5 text-center'>
-                    NEW PLAN
+                    {t('newPlanPage.title')}
                 </Col>
                 <Col as="p" md={10} className='fs-4 text-center bg-white border border-dark border-3 pt-3 pb-3 rounded'>
-                    BEFORE ADDING A NEW MEDICINE PROVIDE SOME USEFUL INFORMATIONS ABOUT YOUR DAILY ROUTINE
+                    {t('newPlanPage.description')}
                 </Col>
             </Row>
 
@@ -48,7 +50,7 @@ function NewPlanPage() {
             </Row>
             <Row className='justify-content-center'>
                 <Col md={8} className='mb-4 text-center'>
-                    <Button size='lg' onClick={skip}>SKIP THIS STEP</Button>
+                    <Button size='lg' onClick={skip}>{t('newPlanPage.skipStep')}</Button>
                 </Col>
             </Row>
 
@@ -62,7 +64,7 @@ function NewPlanPage() {
 
             <Row className='mt-2 pt-3 justify-content-center border-top border-2 border-dark'>
                 <Col md={8} className='text-center'>
-                    <Button className="btn-success" size='lg' onClick={askForHelp}>DO IT FOR ME <i className="bi bi-telephone ms-3"></i></Button>
+                    <Button className="btn-success" size='lg' onClick={askForHelp}>{t('helpPage.askForHelp')} <i className="bi bi-telephone ms-3"></i></Button>
                 </Col>
             </Row>
             <InfoPlanModal show={show} onHide={() => setShow(false)} />

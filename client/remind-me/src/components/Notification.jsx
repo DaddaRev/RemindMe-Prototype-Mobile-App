@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react';
 import { Row, Col } from 'react-bootstrap'; 
 import { useNavigate } from 'react-router';
 import API from '../API/API.mjs';
+import { useTranslation } from 'react-i18next';
 
 function Notification() {
   const [showNotification, setShowNotification] = useState(false);
   const [notificationData, setNotificationData] = useState(null);
   const [showTooTiredScreen, setShowTooTiredScreen] = useState(false);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     // Poll the server every 5 seconds
@@ -81,7 +83,7 @@ function Notification() {
                 <Row className="justify-content-center mb-4">
                   <Col xs={12}>
                     <h4 className="fw-bold mb-2" style={{ color: '#2d3748' }}>
-                      What would you like to do?
+                      {t('notification.whatToDo')}
                     </h4>
                   </Col>
                 </Row>
@@ -115,7 +117,7 @@ function Notification() {
                         e.target.style.backgroundColor = '#fff9c4';
                       }}
                     >
-                      Postpone 10 minutes
+                      {t('notification.postpone')}
                     </button>
                   </Col>
 
@@ -144,7 +146,7 @@ function Notification() {
                         e.target.style.backgroundColor = '#ffccbc';
                       }}
                     >
-                      Modify assumption plan
+                      {t('notification.modifyPlan')}
                     </button>
                   </Col>
 
@@ -170,7 +172,7 @@ function Notification() {
                         e.target.style.color = '#718096';
                       }}
                     >
-                      Cancel
+                      {t('buttons.cancel')}
                     </button>
                   </Col>
                 </Row>
@@ -226,7 +228,7 @@ function Notification() {
               <Row className="justify-content-center mb-4">
                 <Col xs={12}>
                   <p className="text-muted mb-0" style={{ fontSize: '0.95rem' }}>
-                    It's time to take your medicine!
+                    {t('notification.timeToTake')}
                   </p>
                 </Col>
               </Row>
@@ -257,7 +259,7 @@ function Notification() {
                       e.target.style.borderColor = '#cbd5e0';
                     }}
                   >
-                    I'm too tired
+                    {t('notification.tooTired')}
                   </button>
                 </Col>
 
@@ -285,7 +287,7 @@ function Notification() {
                       e.target.style.backgroundColor = '#e63946';
                     }}
                   >
-                    I'll take it
+                    {t('notification.takeIt')}
                   </button>
                 </Col>
               </Row>

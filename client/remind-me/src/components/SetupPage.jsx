@@ -1,13 +1,24 @@
 import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
+import LanguageSelector from './LanguageSelector';
+import { useTranslation } from 'react-i18next';
 
 function SetupPage() {
 	const navigate = useNavigate();
+	const { t } = useTranslation();
 
 	return (
 		<div className="setup-page d-flex flex-column">
+			<div style={{ 
+					position: 'absolute', 
+					top: '25px', 
+					right: '10px', 
+					zIndex: 1000 
+				}}>
+					<LanguageSelector />
+            </div>
 			<div className="setup-header text-center">
-				<p className="setup-kicker mb-1">WELCOME TO</p>
+				<p className="setup-kicker mb-1">{t('setupPage.title')}</p>
 				<h1 className="setup-title mb-1">REMIND ME</h1>
 			</div>
 
@@ -21,7 +32,7 @@ function SetupPage() {
 						<div className="setup-bottle-label">RM</div>
 					</div>
 				</div>
-				<p className="setup-empty-text mb-0">There are no uploaded plans for the moment</p>
+				<p className="setup-empty-text mb-0">{t('setupPage.noPlans')}</p>
 			</div>
 
 			<div className="setup-footer border-top border-3 border-dark pt-3">
@@ -29,7 +40,7 @@ function SetupPage() {
 					className="setup-new-plan-btn w-100 py-3 border-3 fw-bold"
 					onClick={() => navigate('/newPlan')}
 				>
-					<span className="fs-4">NEW PLAN <i class="bi bi-plus-circle-fill fs-3 text-success" ></i></span>
+					<span className="fs-4">{t('navigation.newPlan')}<i class="bi bi-plus-circle-fill fs-3 text-success" ></i></span>
 				</Button>
 			</div>
 		</div>

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import BackButton from "./BackButton";
 import { useNavigate } from 'react-router';
+import { useTranslation } from 'react-i18next';
 
 
 function QR_Scan(props) {
@@ -9,6 +10,7 @@ function QR_Scan(props) {
   const [inputText, setInputText] = useState("");
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const determinePlanId = () => {
     if (props.morning == "7-10") {
@@ -93,7 +95,7 @@ function QR_Scan(props) {
 
       {/* Overlay with frame */}
       <div className="position-absolute start-50 translate-middle-x w-100 h-100 d-flex flex-column align-items-center pointer-events-none" style={{ top: 0, paddingTop: "60px" }}>
-        <h1 className="text-white mb-5" style={{ zIndex: 1 }}>NEW PLAN</h1>
+        <h1 className="text-white mb-5" style={{ zIndex: 1 }}>{t('newPlanPage.title')}</h1>
         <div
           className="border border-white"
           style={{
@@ -108,7 +110,7 @@ function QR_Scan(props) {
       {/* Text Input */}
       <Form.Control
         type="text"
-        placeholder="Enter plan code..."
+        placeholder={t('qrScan.enterPlanCode')}
         value={inputText}
         onChange={(e) => setInputText(e.target.value)}
         className="position-absolute start-50 translate-middle-x"
@@ -127,7 +129,7 @@ function QR_Scan(props) {
         onClick={handleSubmit}
         style={{ borderRadius: "0", bottom: "30px", pointerEvents: "auto" }}
       >
-        SCAN
+        {t('qrScan.scan')}
       </Button>
 
       <Modal
@@ -138,7 +140,7 @@ function QR_Scan(props) {
           size="sm"
       >
           <Modal.Body className='fs-5 text-center'>
-          NEW PLAN SUCCESSFULLY ADDED!
+          {t('qrScan.successMessage')}
           </Modal.Body>
           <Modal.Footer className="d-flex justify-content-center">
           <Button size="lg" variant="primary" onClick={onHide}>

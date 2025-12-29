@@ -6,13 +6,17 @@ import API from '../API/API.mjs';
 import MedicineCard from './MedicineCards';
 import useAlignedClock from '../hooks/useAlignedClock';
 import useSwipe from '../hooks/useSwipe';
+import { useTranslation } from 'react-i18next';
 
+// Keep English day names for API calls
 const daysOfWeek = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const dayKeys = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
 
 function HomePage(props) {
   const navigate = useNavigate();
   const location = useLocation();
   const planId = props.planId ?? 1;
+  const { t } = useTranslation();
 
 
   const [scheduledMedicines, setScheduledMedicines] = useState([]);
@@ -34,7 +38,9 @@ function HomePage(props) {
   const currentTime = useAlignedClock();
 
   const today = new Date();
-  const dayName = daysOfWeek[today.getDay()];
+  const dayIndex = today.getDay();
+  const dayName = daysOfWeek[dayIndex]; // English for API
+  const dayNameDisplay = t(`days.${dayKeys[dayIndex]}`); // Localized for UI
   const dayNumber = today.getDate();
   const month = today.getMonth();
   
@@ -79,7 +85,7 @@ function HomePage(props) {
       {showSuccessModal && (
         <div className="in-app-overlay" style={{ zIndex: 9999 }}>
           <div className="custom-modal-card">
-            <h4 className="fw-bold text-center text-success">SUCCESS!</h4>
+            <h4 className="fw-bold text-center text-success">{t('common.success')}</h4>
             <p className="text-center fs-5 mb-4">{successMsg}</p>
             <Button 
               variant="success" 
@@ -99,9 +105,9 @@ function HomePage(props) {
             className="border-3 fw-bold action-btn"
             style={{ background: 'rgba(254, 254, 254, 1)', borderColor: '#2D2D2D', color: '#1a1a1a' }}
             onClick={props.toggleEditMode}
-            aria-label="Back"
+            aria-label={t('navigation.back')}
           >
-            ← Back
+            ← {t('navigation.back')}
           </Button>
         </div>
       )}
@@ -111,7 +117,7 @@ function HomePage(props) {
           <Card.Body className="p-3">
             <Row className="align-items-center">
               <Col xs={7} className="text-start">
-                <h2 className="fw-bold mb-1" style={{ fontSize: '1.8rem' }}>{dayName.toUpperCase()}</h2>
+                <h2 className="fw-bold mb-1" style={{ fontSize: '1.8rem' }}>{dayNameDisplay.toUpperCase()}</h2>
                 <p className="mb-0 text-muted fw-semibold" style={{ fontSize: '1rem' }}>
                   {`${dayNumber}/${month + 1 < 10 ? '0' : ''}${month + 1}`}
                 </p>
@@ -139,7 +145,7 @@ function HomePage(props) {
           )}
           {!loading && !fetchError && scheduledMedicines.length === 0 && (
             <Alert variant="secondary" className="mb-3">
-              No medicines scheduled for today.
+              {t('homePage.noMedicines')}
             </Alert>
           )}
           {scheduledMedicines.map((medicine, idx) => (
@@ -169,7 +175,7 @@ function HomePage(props) {
               onClick={() => navigate('/help')}
             >
               <div className="d-flex align-items-center justify-content-center gap-4">
-                <span>ASK FOR HELP</span>
+                <span>{t('helpPage.askForHelp')}</span>
                 <span><i class="bi bi-telephone-fill text-success fs-3"></i></span>
               </div>
             </Button>
@@ -182,7 +188,7 @@ function HomePage(props) {
                   onClick={() => navigate('/newPlan')}
                 >
                   <div className="d-flex align-items-center justify-content-center gap-4">
-                    <span>NEW<br />PLAN</span>
+                    <span>{t('buttons.new')}<br />{t('buttons.plan')}</span>
                     <span><i class="bi bi-plus-circle-fill fs-3 text-success" ></i></span>
                   </div>
                 </Button>
@@ -194,7 +200,7 @@ function HomePage(props) {
                   onClick={props.toggleEditMode}
                 >
                   <div className="d-flex align-items-center justify-content-center gap-4">
-                    <span>UPDATE<br />PLAN</span>
+                    <span>{t('buttons.update')}<br />{t('buttons.plan')}</span>
                     <span><i class="bi bi-pencil-fill text-warning fs-3"></i></span>
                   </div>
                 </Button>

@@ -1,0 +1,127 @@
+{
+  "common": {
+    "language": "Lingua",
+    "english": "Inglese",
+    "italian": "Italiano",
+    "success": "SUCCESSO!"
+  },
+  "days": {
+    "sunday": "Domenica",
+    "monday": "Lunedì",
+    "tuesday": "Martedì",
+    "wednesday": "Mercoledì",
+    "thursday": "Giovedì",
+    "friday": "Venerdì",
+    "saturday": "Sabato"
+  },
+  "months": {
+    "january": "Gennaio",
+    "february": "Febbraio",
+    "march": "Marzo",
+    "april": "Aprile",
+    "may": "Maggio",
+    "june": "Giugno",
+    "july": "Luglio",
+    "august": "Agosto",
+    "september": "Settembre",
+    "october": "Ottobre",
+    "november": "Novembre",
+    "december": "Dicembre"
+  },
+  "homePage": {
+    "title": "Medicine di Oggi",
+    "noMedicines": "Nessuna medicina programmata per oggi",
+    "loading": "Caricamento...",
+    "error": "Errore nel caricamento delle medicine"
+  },
+  "navigation": {
+    "home": "Home",
+    "schedule": "Programma",
+    "newPlan": "Nuovo Piano",
+    "help": "Aiuto",
+    "back": "Indietro"
+  },
+  "buttons": {
+    "edit": "Modifica",
+    "save": "Salva",
+    "cancel": "Annulla",
+    "confirm": "Conferma",
+    "add": "Aggiungi",
+    "delete": "Elimina",
+    "next": "Avanti",
+    "previous": "Precedente",
+    "new": "Nuovo",
+    "plan": "Piano",
+    "update": "Aggiorna"
+  },
+  "setupPage": {
+    "title": "Benvenuto su",
+    "noPlans": "Non ci sono piani caricati al momento"
+  },
+  "helpPage": {
+    "question": "Chi vuoi che esegua l'azione per te?",
+    "primaryPhysician": "Medico di base",
+    "cardiologist": "Cardiologo",
+    "neighbor": "Vicino",
+    "friend": "Amico",
+    "askForHelp": "Chiedi aiuto",
+    "notificationMessage": "Una volta che {{name}} avrà completato il tuo piano sarai notificato!"
+  },
+  "infoPlanModal": {
+    "title": "Informazioni sul piano",
+    "body": "Il piano serve per raggruppare le medicine che devi assumere durante la settimana con i loro orari di assunzione.",
+    "understood": "Compreso"
+  },
+  "newPlanPage": {
+    "title": "Nuovo Piano",
+    "description": "Prima di aggiungere una nuova medicina fornisci alcune informazioni utili sulla tua routine quotidiana",
+    "skipStep": "Salta"
+  },
+  "notification": {
+    "whatToDo": "Cosa vorresti fare?",
+    "postpone": "Posticipa di 10 minuti",
+    "modifyPlan": "Modifica piano di assunzione",
+    "timeToTake": "È ora di prendere la tua medicina!",
+    "tooTired": "Sono troppo stanco",
+    "takeIt": "La prenderò"
+  },
+  "personalization": {
+    "step1Title": "Personalizzazione passo #1",
+    "step1Question": "Quando sei più a tuo agio nel muoverti durante il giorno? (seleziona almeno una fascia oraria)",
+    "step2Title": "Personalizzazione passo #2",
+    "step2Question": "Aggiungi una motivazione dietro le fasce selezionate (facoltativo)",
+    "morning": "Mattina",
+    "afternoon": "Pomeriggio",
+    "evening": "Sera",
+    "cancelOperation": "Annulla operazione",
+    "enterMotivation": "Inserisci una motivazione"
+  },
+  "qrScan": {
+    "enterPlanCode": "Inserisci il codice del piano...",
+    "scan": "SCANSIONA",
+    "successMessage": "NUOVO PIANO AGGIUNTO CON SUCCESSO!"
+  },
+  "updatePage": {
+    "notFound": "Medicina non trovata.",
+    "errorLoading": "Errore nel caricamento dei dettagli della medicina.",
+    "changesSaved": "Modifiche salvate con successo!",
+    "errorSaving": "Errore nel salvataggio dei dati. Riprova.",
+    "medicineDeleted": "Medicina eliminata con successo!",
+    "errorDeleting": "Errore nell'eliminazione della medicina.",
+    "assumptionTime": "Orario di Assunzione",
+    "assumptionModality": "Modalità di Assunzione",
+    "description": "Descrizione",
+    "noDescription": "Nessuna descrizione disponibile",
+    "descriptionPlaceholder": "Descrizione...",
+    "sendNotification": "INVIA NOTIFICA",
+    "confirmChanges": "CONFERMA MODIFICHE",
+    "confirmTitle": "CONFERMARE LE MODIFICHE?",
+    "confirmQuestion": "Sei sicuro di voler salvare?",
+    "yesSave": "SI, SALVA",
+    "setTime": "IMPOSTA ORARIO",
+    "deleteTitle": "ELIMINARE LA MEDICINA?",
+    "deleteQuestion": "Sei sicuro di voler eliminare {{name}} dal tuo piano?",
+    "yesDelete": "SI, ELIMINA",
+    "error": "ERRORE"
+  }
+}

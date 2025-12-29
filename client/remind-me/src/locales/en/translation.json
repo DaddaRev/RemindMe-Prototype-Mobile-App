@@ -1,0 +1,127 @@
+{
+  "common": {
+    "language": "Language",
+    "english": "English",
+    "italian": "Italian",
+    "success": "SUCCESS!"
+  },
+  "days": {
+    "sunday": "Sunday",
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday"
+  },
+  "months": {
+    "january": "January",
+    "february": "February",
+    "march": "March",
+    "april": "April",
+    "may": "May",
+    "june": "June",
+    "july": "July",
+    "august": "August",
+    "september": "September",
+    "october": "October",
+    "november": "November",
+    "december": "December"
+  },
+  "homePage": {
+    "title": "Today's Medicines",
+    "noMedicines": "No medicines scheduled for today",
+    "loading": "Loading...",
+    "error": "Error loading medicines"
+  },
+  "navigation": {
+    "home": "Home",
+    "schedule": "Schedule",
+    "newPlan": "New Plan",
+    "help": "Help",
+    "back": "Back"
+  },
+  "buttons": {
+    "edit": "Edit",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "add": "Add",
+    "delete": "Delete",
+    "next": "Next",
+    "previous": "Previous",
+    "new": "New",
+    "plan": "Plan",
+    "update": "Update"
+  },
+  "setupPage": {
+    "title": "Welcome to",
+    "noPlans": "There are no uploaded plans for the moment"
+  },
+  "helpPage": {
+    "question": "Who you want to perform the action for you?",
+    "primaryPhysician": "Primary physician",
+    "cardiologist": "Cardiologist",
+    "neighbor": "Neighbor",
+    "friend": "Friend",
+    "askForHelp": "Ask for help",
+    "notificationMessage": "Once {{name}} has completed your plan you will be notified!"
+  },
+  "infoPlanModal": {
+    "title": "Information on plan",
+    "body": "Plan is used for gathering together the medicines you need to take during the week with their intake times.",
+    "understood": "Understood"
+  },
+  "newPlanPage": {
+    "title": "New Plan",
+    "description": "Before adding a new medicine provide some useful informations about your daily routine",
+    "skipStep": "Skip this step"
+  },
+  "notification": {
+    "whatToDo": "What would you like to do?",
+    "postpone": "Postpone 10 minutes",
+    "modifyPlan": "Modify assumption plan",
+    "timeToTake": "It's time to take your medicine!",
+    "tooTired": "I'm too tired",
+    "takeIt": "I'll take it"
+  },
+  "personalization": {
+    "step1Title": "Personalization step #1",
+    "step1Question": "When are you more comfortable with moving during the day? (select at least a time slot)",
+    "step2Title": "Personalization step #2",
+    "step2Question": "Add a motivation behind the selected slots (optional)",
+    "morning": "Morning",
+    "afternoon": "Afternoon",
+    "evening": "Evening",
+    "cancelOperation": "Cancel operation",
+    "enterMotivation": "Enter a motivation"
+  },
+  "qrScan": {
+    "enterPlanCode": "Enter plan code...",
+    "scan": "SCAN",
+    "successMessage": "NEW PLAN SUCCESSFULLY ADDED!"
+  },
+  "updatePage": {
+    "notFound": "Medicine not found.",
+    "errorLoading": "Error loading medicine details.",
+    "changesSaved": "Changes saved successfully!",
+    "errorSaving": "Error saving data. Please try again.",
+    "medicineDeleted": "Medicine deleted successfully!",
+    "errorDeleting": "Error deleting medicine.",
+    "assumptionTime": "Assumption Time",
+    "assumptionModality": "Assumption Modality",
+    "description": "Description",
+    "noDescription": "No description available",
+    "descriptionPlaceholder": "Description...",
+    "sendNotification": "SEND NOTIFICATION",
+    "confirmChanges": "CONFIRM CHANGES",
+    "confirmTitle": "CONFIRM CHANGES?",
+    "confirmQuestion": "Are you sure you want to save?",
+    "yesSave": "YES, SAVE",
+    "setTime": "SET TIME",
+    "deleteTitle": "DELETE MEDICINE?",
+    "deleteQuestion": "Are you sure you want to delete {{name}} from your plan?",
+    "yesDelete": "YES, DELETE",
+    "error": "ERROR"
+  }
+}

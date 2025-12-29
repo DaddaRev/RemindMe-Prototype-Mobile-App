@@ -5,8 +5,11 @@ import { useNavigate, useSearchParams, useLocation } from 'react-router';
 import API from '../API/API.mjs';
 import MedicineCard from './MedicineCards';
 import useSwipe from '../hooks/useSwipe';
+import { useTranslation } from 'react-i18next';
 
+// Keep English day names for API calls
 const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const dayKeys = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
 const WEEK_MAX_OFFSET = 6; // today + 6 days = 7-day window
 
 function SchedulePage(props) {
@@ -14,6 +17,7 @@ function SchedulePage(props) {
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const planId = props.planId ?? 1;
+  const { t } = useTranslation();
 
   // Get initial dayOffset from URL params, default to 1 (tomorrow)
   const initialOffset = location.state?.returnToOffset || 1;
@@ -45,7 +49,9 @@ function SchedulePage(props) {
   };
 
   const currentDate = getCurrentDate();
-  const dayName = daysOfWeek[currentDate.getDay()];
+  const dayIndex = currentDate.getDay();
+  const dayName = daysOfWeek[dayIndex]; // English for API
+  const dayNameDisplay = t(`days.${dayKeys[dayIndex]}`); // Localized for UI
   const dayNumber = currentDate.getDate();
   const month = currentDate.getMonth();
 
@@ -94,7 +100,7 @@ function SchedulePage(props) {
       {showSuccessModal && (
         <div className="in-app-overlay" style={{ zIndex: 9999 }}>
           <div className="custom-modal-card">
-            <h4 className="fw-bold text-center text-success">SUCCESS!</h4>
+            <h4 className="fw-bold text-center text-success">{t('common.success')}</h4>
             <p className="text-center fs-5 mb-4">{successMsg}</p>
             <Button
               variant="success"
@@ -114,9 +120,9 @@ function SchedulePage(props) {
             className="border-3 fw-bold action-btn"
             style={{ background: 'rgba(254, 254, 254, 1)', borderColor: '#2D2D2D', color: '#1a1a1a' }}
             onClick={props.toggleEditMode}
-            aria-label="Back"
+            aria-label={t('navigation.back')}
           >
-            ← Back
+            ← {t('navigation.back')}
           </Button>
         </div>
       )}
@@ -126,7 +132,7 @@ function SchedulePage(props) {
           <Card.Body className="p-3">
             <Row className="align-items-center">
               <Col xs={12} className="text-center">
-                <h2 className="fw-bold mb-1">{dayName.toUpperCase()}</h2>
+                <h2 className="fw-bold mb-1">{dayNameDisplay.toUpperCase()}</h2>
                 <p className="mb-0 text-muted fw-semibold">
                   {`${dayNumber}/${month + 1 < 10 ? '0' : ''}${month + 1}`}
                 </p>
@@ -151,7 +157,7 @@ function SchedulePage(props) {
           )}
           {!loading && !fetchError && scheduledMedicines.length === 0 && (
             <Alert variant="secondary" className="mb-3">
-              No medicines scheduled for {dayName}.
+              {t('homePage.noMedicines')} {dayNameDisplay}.
             </Alert>
           )}
           {scheduledMedicines.map((medicine, idx) => (
@@ -193,7 +199,7 @@ function SchedulePage(props) {
                   onClick={() => navigate('/help')}
                 >
                   <div className="d-flex align-items-center justify-content-center gap-4">
-                    <span>ASK FOR HELP</span>
+                    <span>{t('helpPage.askForHelp')}</span>
                     <span><i class="bi bi-telephone-fill text-success fs-3"></i></span>
                   </div>
                 </Button>
@@ -207,7 +213,7 @@ function SchedulePage(props) {
                     onClick={() => navigate('/newPlan')}
                   >
                     <div className="d-flex align-items-center justify-content-center gap-4">
-                      <span>NEW<br />PLAN</span>
+                      <span>{t('buttons.new')}<br />{t('buttons.plan')}</span>
                       <span><i class="bi bi-plus-circle-fill fs-3 text-success" ></i></span>
                     </div>
                   </Button>
@@ -219,7 +225,7 @@ function SchedulePage(props) {
                     onClick={props.toggleEditMode}
                   >
                     <div className="d-flex align-items-center justify-content-center gap-4">
-                      <span>UPDATE<br />PLAN</span>
+                      <span>{t('buttons.update')}<br />{t('buttons.plan')}</span>
                       <span><i class="bi bi-pencil-fill text-warning fs-3"></i></span>
                     </div>
                   </Button>

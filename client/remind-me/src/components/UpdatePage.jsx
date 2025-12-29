@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Container, Button, Form, Alert, Spinner, Row, Col } from 'react-bootstrap';
 import { useNavigate, useLocation, useParams } from 'react-router';
 import API from "../API/API.mjs";
+import { useTranslation } from 'react-i18next';
 
 const UpdatePage = (props) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { planId, medicineId } = useParams(); // Prende gli ID dall'URL
+  const { t } = useTranslation();
 
   // Recupera dati passati dalla Home o null se accesso diretto
   const passedData = location.state?.medicine;
@@ -64,11 +66,11 @@ const UpdatePage = (props) => {
           if (found) {
             initializeForm(found);
           } else {
-            setError("Medicine not found.");
+            setError(t('updatePage.notFound'));
           }
         } catch (err) {
           console.error(err);
-          setError("Error loading medicine details.");
+          setError(t('updatePage.errorLoading'));
         } finally {
           setLoading(false);
         }
@@ -226,13 +228,13 @@ const UpdatePage = (props) => {
       props.setEditMode(false);
 
       // Successo: Torna indietro col messaggio
-      goBackWithFeedback('Changes saved successfully!');
+      goBackWithFeedback(t('updatePage.changesSaved'));
 
     } catch (err) {
       console.error(err);
       setShowConfirmModal(false);
       // Errore: Resta qui e mostra il modale rosso
-      setErrorMsg('Error saving data. Please try again.');
+      setErrorMsg(t('updatePage.errorSaving'));
       setShowErrorModal(true);
     }
   };
@@ -242,12 +244,12 @@ const UpdatePage = (props) => {
     try {
       await API.deleteScheduledMedicine(planId, formData.id_sched_med);
       // Successo: Torna indietro col messaggio
-      goBackWithFeedback('Medicine deleted successfully!');
+      goBackWithFeedback(t('updatePage.medicineDeleted'));
     } catch (err) {
       console.error("Error deleting:", err);
       setShowDeleteModal(false);
       // Errore: Resta qui e mostra il modale rosso
-      setErrorMsg('Error deleting medicine.');
+      setErrorMsg(t('updatePage.errorDeleting'));
       setShowErrorModal(true);
     }
   };
@@ -277,9 +279,9 @@ const UpdatePage = (props) => {
           className="border-3 fw-bold action-btn"
           style={{ background: 'rgba(254, 254, 254, 1)', borderColor: '#2D2D2D', color: '#1a1a1a', marginTop: '2px' }}
           onClick={() => goBackWithFeedback()}
-          aria-label="Back"
+          aria-label={t('navigation.back')}
         >
-          ← Back
+          ← {t('navigation.back')}
         </Button>
         <Button
           variant={props.editMode ? 'outline-danger' : 'outline-dark'}
@@ -312,7 +314,7 @@ const UpdatePage = (props) => {
             <div className="border-3 rounded-2 p-3" style={{ borderColor: '#2D2D2D', background: 'linear-gradient(135deg, #FFFFFF 0%, #FFF8E7 100%)', boxShadow: '0 2px 8px rgba(224, 175, 101, 0.15)' }}>
               <Row className="align-items-center g-1">
                 <Col xs={4} className="text-center">
-                  <div className="text-uppercase fw-bold" style={{ fontSize: '1rem', color: '#3d3d00', letterSpacing: '0.8px', lineHeight: '1.3' }}>Assumption<br />Time</div>
+                  <div className="text-uppercase fw-bold" style={{ fontSize: '1rem', color: '#3d3d00', letterSpacing: '0.8px', lineHeight: '1.3' }}>{t('updatePage.assumptionTime')}</div>
                 </Col>
                 <Col xs={4} className="d-flex justify-content-center">
                   <div className="d-flex justify-content-center align-items-center" style={{ width: '55px', height: '55px', background: '#FFF9ED', borderRadius: '10px' }}>
@@ -329,7 +331,7 @@ const UpdatePage = (props) => {
             <div className="border-3 rounded-2 p-3" style={{ borderColor: '#2D2D2D', background: 'linear-gradient(135deg, #FFFFFF 0%, #FFF8E7 100%)', boxShadow: '0 2px 8px rgba(224, 175, 101, 0.15)' }}>
               <Row className="align-items-center g-1">
                 <Col xs={4} className="text-center">
-                  <div className="text-uppercase fw-bold" style={{ fontSize: '0.90rem', color: '#3d3d00', letterSpacing: '0.8px', lineHeight: '1.3' }}>Assumption<br />Modality</div>
+                  <div className="text-uppercase fw-bold" style={{ fontSize: '0.90rem', color: '#3d3d00', letterSpacing: '0.8px', lineHeight: '1.3' }}>{t('updatePage.assumptionModality')}</div>
                 </Col>
                 <Col xs={4} className="d-flex justify-content-center">
                   <div className="d-flex justify-content-center align-items-center" style={{ width: '55px', height: '55px', background: '#FFF9ED', borderRadius: '10px' }}>
@@ -345,10 +347,10 @@ const UpdatePage = (props) => {
             {/* 4. Description */}
             <div className="border-3 rounded-2 p-3" style={{ borderColor: '#2D2D2D', background: 'linear-gradient(135deg, #FFFFFF 0%, #FFF8E7 100%)', boxShadow: '0 2px 8px rgba(224, 175, 101, 0.15)' }}>
               <div className="text-uppercase fw-bold mb-2" style={{ fontSize: '1rem', color: '#3d3d00', letterSpacing: '0.8px' }}>
-                Description
+                {t('updatePage.description')}
               </div>
               <div className="fst-italic px-3 py-2 border-start border-3" style={{ minHeight: '60px', fontSize: '1.05rem', lineHeight: '1.5', color: '#555', borderColor: '#e0af65 !important' }}>
-                {formData.description || <span className="text-muted opacity-75">No description available</span>}
+                {formData.description || <span className="text-muted opacity-75">{t('updatePage.noDescription')}</span>}
               </div>
             </div>
 
@@ -360,7 +362,7 @@ const UpdatePage = (props) => {
           <div className="d-flex flex-column gap-3 px-1 pb-4">
             {/* 1. Time Select */}
             <div className="d-flex align-items-center justify-content-between">
-              <div className="label-text w-50" style={{ fontSize: '0.98rem', lineHeight: '1.25', textTransform: 'none', color: '#3c3124' }}>Assumption<br />time:</div>
+              <div className="label-text w-50" style={{ fontSize: '0.98rem', lineHeight: '1.25', textTransform: 'none', color: '#3c3124' }}>{t('updatePage.assumptionTime')}:</div>
               <div className="w-100 ms-2 d-flex align-items-center" onClick={openTimePicker}>
                 <div className="d-flex justify-content-center align-items-center" style={{ width: '45px', flexShrink: 0, marginRight: '8px' }}>
                   <span style={{ fontSize: '2rem', lineHeight: 1 }}>⏰</span>
@@ -379,7 +381,7 @@ const UpdatePage = (props) => {
             </div>
             {/* 2. Modality Select */}
             <div className="d-flex align-items-center justify-content-between mt-2">
-              <div className="label-text w-50" style={{ fontSize: '0.98rem', lineHeight: '1.25', textTransform: 'none', color: '#3c3124' }}>Assumption <br />modality:</div>
+              <div className="label-text w-50" style={{ fontSize: '0.98rem', lineHeight: '1.25', textTransform: 'none', color: '#3c3124' }}>{t('updatePage.assumptionModality')}:</div>
               <div className="w-100 ms-2 d-flex align-items-center">
                 <div className="d-flex justify-content-center align-items-center" style={{ width: '45px', flexShrink: 0, marginRight: '8px' }}>
                   <span style={{ fontSize: '2rem', lineHeight: 1 }}>{getModalityIcon(formData.modality)}</span>
@@ -404,19 +406,19 @@ const UpdatePage = (props) => {
             </div>
             {/* 3. Description */}
             <div className="mt-2 w-100">
-              <div className="label-text mb-1" style={{ fontSize: '0.98rem', lineHeight: '1.25', textTransform: 'none', color: '#3c3124' }}>Description:</div>
+              <div className="label-text mb-1" style={{ fontSize: '0.98rem', lineHeight: '1.25', textTransform: 'none', color: '#3c3124' }}>{t('updatePage.description')}:</div>
               <textarea
                 className="edit-field-box text-start fw-normal align-items-start h-auto w-100 mt-3"
                 rows="4"
                 style={{ resize: 'none', fontSize: '0.98rem', color: '#2d2d2d' }}
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                placeholder="Description..."
+                placeholder={t('updatePage.descriptionPlaceholder')}
               ></textarea>
             </div>
             {/* Notification Switch */}
             <div className="d-flex align-items-center justify-content-between mt-1 p-3 rounded-3 border-3" style={{ border: '2px solid #2D2D2D', background: '#FFFBF7' }}>
-              <div className="label-text" style={{ fontSize: '0.85rem' }}>SEND NOTIFICATION</div>
+              <div className="label-text" style={{ fontSize: '0.85rem' }}>{t('updatePage.sendNotification')}</div>
               <label className="switch">
                 <input
                   type="checkbox"
@@ -431,7 +433,7 @@ const UpdatePage = (props) => {
               style={{ borderRadius: '12px', fontSize: '1.2rem', background: '#bce3aaff', borderColor: '#74a96dff', color: '#0f3b12' }}
               onClick={() => setShowConfirmModal(true)}
             >
-              CONFIRM CHANGES ✓
+              {t('updatePage.confirmChanges')} ✓
             </Button>
           </div>
         )}
@@ -445,7 +447,7 @@ const UpdatePage = (props) => {
             style={{ borderRadius: '12px', minWidth: '220px' }}
           >
             <div className="d-flex align-items-center justify-content-center gap-3">
-              <span className="text-uppercase">ASK FOR<br />HELP</span>
+              <span className="text-uppercase">{t('helpPage.askForHelp')}</span>
               <span><i className="bi bi-telephone-fill text-success fs-3"></i></span>
             </div>
           </Button>
@@ -455,11 +457,11 @@ const UpdatePage = (props) => {
       {showConfirmModal && (
         <div className="in-app-overlay">
           <div className="custom-modal-card">
-            <h4 className="fw-bold text-center">CONFIRM CHANGES?</h4>
-            <p className="text-center fs-5">Are you sure you want to save?</p>
+            <h4 className="fw-bold text-center">{t('updatePage.confirmTitle')}</h4>
+            <p className="text-center fs-5">{t('updatePage.confirmQuestion')}</p>
             <div className="d-flex justify-content-between gap-3 mt-2">
-              <Button variant="danger" onClick={() => setShowConfirmModal(false)} className="flex-grow-1 border-2 fw-bold">CANCEL</Button>
-              <Button variant="success" onClick={confirmSave} className="flex-grow-1 fw-bold">YES, SAVE</Button>
+              <Button variant="danger" onClick={() => setShowConfirmModal(false)} className="flex-grow-1 border-2 fw-bold">{t('buttons.cancel')}</Button>
+              <Button variant="success" onClick={confirmSave} className="flex-grow-1 fw-bold">{t('updatePage.yesSave')}</Button>
             </div>
           </div>
         </div>
@@ -468,7 +470,7 @@ const UpdatePage = (props) => {
       {showTimeModal && (
         <div className="in-app-overlay">
           <div className="custom-modal-card" style={{ width: '90%' }}>
-            <h4 className="fw-bold text-center mb-0">SET TIME</h4>
+            <h4 className="fw-bold text-center mb-0">{t('updatePage.setTime')}</h4>
             <div className="tp-header">
               <div className={`tp-digit-box ${activeField === 'hours' ? 'active' : ''}`} onClick={() => activateKeypad('hours')}>{pickerTime.h}</div>
               <div className="tp-separator">:</div>
@@ -488,7 +490,7 @@ const UpdatePage = (props) => {
               </div>
             )}
             <div className="d-flex justify-content-between gap-3 mt-2">
-              <Button variant="danger" className="flex-grow-1 border-2 fw-bold" onClick={() => setShowTimeModal(false)}>CANCEL</Button>
+              <Button variant="danger" className="flex-grow-1 border-2 fw-bold" onClick={() => setShowTimeModal(false)}>{t('buttons.cancel')}</Button>
               <Button variant={isTimeValid ? "success" : "dark"} className="flex-grow-1 fw-bold" onClick={saveTime} disabled={!isTimeValid}>OK</Button>
             </div>
           </div>
@@ -498,9 +500,9 @@ const UpdatePage = (props) => {
       {showDeleteModal && (
         <div className="in-app-overlay">
           <div className="custom-modal-card">
-            <h4 className="fw-bold text-center text-danger">DELETE MEDICINE?</h4>
+            <h4 className="fw-bold text-center text-danger">{t('updatePage.deleteTitle')}</h4>
             <p className="text-center fs-5">
-              Are you sure you want to delete <strong>{formData.name}</strong> from your plan?
+              {t('updatePage.deleteQuestion', { name: formData.name })}
             </p>
             <div className="d-flex justify-content-between gap-3 mt-2">
               <Button
@@ -508,14 +510,14 @@ const UpdatePage = (props) => {
                 onClick={() => setShowDeleteModal(false)}
                 className="flex-grow-1 border-2 fw-bold"
               >
-                CANCEL
+                {t('buttons.cancel')}
               </Button>
               <Button
                 variant="danger"
                 onClick={confirmDelete}
                 className="flex-grow-1 fw-bold"
               >
-                YES, DELETE
+                {t('updatePage.yesDelete')}
               </Button>
             </div>
           </div>
@@ -525,7 +527,7 @@ const UpdatePage = (props) => {
       {showErrorModal && (
         <div className="in-app-overlay">
           <div className="custom-modal-card">
-            <h4 className="fw-bold text-center text-danger">ERROR ⚠️</h4>
+            <h4 className="fw-bold text-center text-danger">{t('updatePage.error')} ⚠️</h4>
             <p className="text-center fs-5">{errorMsg}</p>
             <Button variant="dark" onClick={() => setShowErrorModal(false)} className="w-100 fw-bold">
               OK

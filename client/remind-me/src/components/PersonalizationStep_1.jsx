@@ -3,12 +3,14 @@ import { useState } from 'react';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { useNavigate } from 'react-router';
 import BackButton from './BackButton';
+import { useTranslation } from 'react-i18next';
 
 function PersonalizationStep_1(props) {
 
 
     const hasAnySelection = Boolean(props.morning || props.afternoon || props.evening);
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const goBack = () => {
         navigate("/");
@@ -30,16 +32,16 @@ function PersonalizationStep_1(props) {
 
             <Row className='justify-content-center'>
                 <Col as="h2" className='mb-3 text-center'>
-                    PERSONALIZATION STEP #1
+                    {t('personalization.step1Title')}
                 </Col>
                 <Col as="p" md={11} className='fs-5 text-center bg-white border border-dark border-3 pt-3 pb-3 rounded'>
-                    WHEN ARE YOU MORE COMFORTABLE WITH MOVING DURING THE DAY? (SELECT AT LEAST A TIME SLOT)
+                    {t('personalization.step1Question')}
                 </Col>
             </Row>
 
             <Row className='mb-3'>
                 <Col md={12} as="p" className='fw-bold'>
-                    MORNING:
+                    {t('personalization.morning')}:
                 </Col>
                 <Col md={6} className='text-center'>
                     <Button
@@ -64,7 +66,7 @@ function PersonalizationStep_1(props) {
             </Row>
             <Row className='mb-3'>
                 <Col md={12} as="p" className='fw-bold'>
-                    AFTERNOON:
+                    {t('personalization.afternoon')}:
                 </Col>
                 <Col md={6} className='text-center'>
                     <Button
@@ -89,7 +91,7 @@ function PersonalizationStep_1(props) {
             </Row>
             <Row className='mb-3'>
                 <Col md={12} as="p" className='fw-bold'>
-                    EVENING:
+                    {t('personalization.evening')}:
                 </Col>
                 <Col md={6} className='text-center'>
                     <Button
@@ -115,18 +117,18 @@ function PersonalizationStep_1(props) {
 
             <Row className='mt-4'>
                 <Col md={8} className='text-center'>
-                    <Button onClick={goBack}>CANCEL OPERATION</Button>
+                    <Button onClick={goBack}>{t('personalization.cancelOperation')}</Button>
                 </Col>
                 {hasAnySelection && (
                     <Col md={4}>
-                        <Button onClick={nextStep}>NEXT</Button>
+                        <Button onClick={nextStep}>{t('buttons.next')}</Button>
                     </Col>
                 )}
             </Row>
 
             <Row className='mt-4 justify-content-center border-top border-2 border-dark pt-3'>
                 <Col className='text-center'>
-                    <Button className="btn-success" size='lg' onClick={askForHelp}>DO IT FOR ME <i className="bi bi-telephone ms-3"></i></Button>
+                    <Button className="btn-success" size='lg' onClick={askForHelp}>{t('helpPage.askForHelp')} <i className="bi bi-telephone ms-3"></i></Button>
                 </Col>
             </Row>
         </Container>
