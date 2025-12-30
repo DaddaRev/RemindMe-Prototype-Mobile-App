@@ -94,15 +94,15 @@ function QR_Scan(props) {
       <BackButton variant="light" className="position-absolute" style={{ top: "20px", left: "20px", zIndex: 10 }} />
 
       {/* Overlay with frame */}
-      <div className="position-absolute start-50 translate-middle-x w-100 h-100 d-flex flex-column align-items-center pointer-events-none" style={{ top: 0, paddingTop: "60px" }}>
-        <h1 className="text-white mb-5" style={{ zIndex: 1 }}>{t('newPlanPage.title')}</h1>
+      <div className="position-absolute start-50 translate-middle-x w-100 h-100 d-flex flex-column align-items-center pointer-events-none mt-3 mb-2" style={{ top: 0, paddingTop: "clamp(40px, 8vh, 80px)" }}>
+        <h1 className="text-white mb-2" style={{ zIndex: 1, fontSize: 'clamp(1rem, 3.5vw, 1.3rem)', textAlign: 'center', padding: '0 1rem', lineHeight: '1.3' }}>{t('qrScan.instruction')}</h1>
         <div
           className="border border-white"
           style={{
-            width: "70vw",
-            maxWidth: "300px",
+            width: "clamp(200px, 70vw, 300px)",
             aspectRatio: "1/1",
-            boxShadow: "0 0 0 9999px rgba(0,0,0,0.5)"
+            boxShadow: "0 0 0 9999px rgba(0,0,0,0.5)",
+            borderWidth: '3px'
           }}
         />
       </div>
@@ -113,21 +113,37 @@ function QR_Scan(props) {
         placeholder={t('qrScan.enterPlanCode')}
         value={inputText}
         onChange={(e) => setInputText(e.target.value)}
-        className="position-absolute start-50 translate-middle-x"
+        className="position-absolute start-50 translate-middle-x mt-2"
         style={{ 
-          bottom: "140px", 
-          width: "70vw", 
-          maxWidth: "300px",
+          bottom: "clamp(100px, 50vh, 280px)", 
+          width: "clamp(250px, 50vw, 320px)",
           zIndex: 10,
-          pointerEvents: "auto"
+          pointerEvents: "auto",
+          borderColor: '#2D2D2D',
+          borderWidth: '3px',
+          borderRadius: '12px',
+          padding: 'clamp(0.6rem, 2vw, 0.85rem)',
+          fontSize: 'clamp(0.9rem, 2.5vw, 1.1rem)',
+          fontWeight: '500'
         }}
       />
 
       <Button
-        className="btn-light position-absolute start-50 translate-middle-x py-3 px-5 fs-1 fw-bold"
+        className="position-absolute start-50 translate-middle-x fw-bold border-3 mt-0"
         size="lg"
         onClick={handleSubmit}
-        style={{ borderRadius: "0", bottom: "30px", pointerEvents: "auto" }}
+        style={{ 
+          bottom: "clamp(20px, 60vh, 170px)", 
+          pointerEvents: "auto",
+          background: 'rgba(254, 254, 254, 1)',
+          borderColor: '#2D2D2D',
+          color: '#1a1a1a',
+          borderRadius: '12px',
+          transition: 'all 0.2s ease',
+          fontSize: 'clamp(1rem, 3.5vw, 1.3rem)',
+          minWidth: 'clamp(180px, 50vw, 240px)',
+          padding: 'clamp(0.6rem, 2vh, 1rem) clamp(1.5rem, 5vw, 2.5rem)'
+        }}
       >
         {t('qrScan.scan')}
       </Button>
@@ -139,13 +155,28 @@ function QR_Scan(props) {
           centered
           size="sm"
       >
-          <Modal.Body className='fs-5 text-center'>
-          {t('qrScan.successMessage')}
+          <Modal.Body className='p-4 text-center'>
+            <h4 className="fw-bold text-success mb-3">{t('common.success')}</h4>
+            <p className='mb-0' style={{ fontSize: 'clamp(1rem, 2.5vw, 1.1rem)' }}>
+              {t('qrScan.successMessage')}
+            </p>
           </Modal.Body>
-          <Modal.Footer className="d-flex justify-content-center">
-          <Button size="lg" variant="primary" onClick={onHide}>
+          <Modal.Footer className="d-flex justify-content-center border-0 pt-0 pb-4">
+            <Button 
+              className="border-3 fw-bold"
+              style={{
+                background: '#f2e999ff',
+                borderColor: '#2D2D2D',
+                color: '#1a1a1a',
+                borderRadius: '12px',
+                transition: 'all 0.2s ease',
+                fontSize: '18px',
+                padding: '0.75rem 3rem'
+              }}
+              onClick={onHide}
+            >
               OK
-          </Button>
+            </Button>
           </Modal.Footer>
       </Modal>
     </div>

@@ -103,7 +103,7 @@ function NewPlanPage() {
                         onClick={askForHelp}
                     >
                         <div className="d-flex align-items-center justify-content-center gap-4">
-                            <span>{t('helpPage.askForHelp')}</span>
+                            <span>{t('personalization.doItForMe')}</span>
                             <span><i className="bi bi-telephone-fill text-success fs-3"></i></span>
                         </div>
                     </Button>

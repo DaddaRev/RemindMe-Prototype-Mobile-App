@@ -456,12 +456,18 @@ const UpdatePage = (props) => {
       <div className="action-section p-3 mt-auto border-top border-3 border-dark">
         <div className="d-flex justify-content-center">
           <Button 
-            variant="outline-dark" 
-            className="py-2 px-4 fs-5 fw-bold btn-thick-border"
-            style={{ borderRadius: '12px', minWidth: '220px' }}
+            className="w-100 py-3 border-3 fw-bold"
+            style={{
+              background: 'rgba(254, 254, 254, 1)',
+              borderColor: '#2D2D2D',
+              color: '#1a1a1a',
+              borderRadius: '12px',
+              transition: 'all 0.2s ease',
+              fontSize: '18px'
+            }}
           >
-            <div className="d-flex align-items-center justify-content-center gap-3">
-              <span className="text-uppercase">{t('helpPage.askForHelp')}</span>
+            <div className="d-flex align-items-center justify-content-center gap-4">
+              <span>{t('helpPage.askForHelp')}</span>
               <span><i className="bi bi-telephone-fill text-success fs-3"></i></span>
             </div>
           </Button>

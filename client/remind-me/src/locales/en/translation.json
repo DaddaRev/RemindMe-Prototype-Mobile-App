@@ -94,12 +94,14 @@
     "afternoon": "Afternoon",
     "evening": "Evening",
     "cancelOperation": "Cancel operation",
-    "enterMotivation": "Enter a motivation"
+    "enterMotivation": "Enter a motivation",
+    "doItForMe": "Do it for me"
   },
   "qrScan": {
     "enterPlanCode": "Enter plan code...",
     "scan": "SCAN",
-    "successMessage": "NEW PLAN SUCCESSFULLY ADDED!"
+    "successMessage": "NEW PLAN SUCCESSFULLY ADDED!",
+    "instruction": "Scan the QR code of the new plan or enter the code manually"
   },
   "enums": {
     "modalities": {

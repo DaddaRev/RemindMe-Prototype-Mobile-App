@@ -94,12 +94,14 @@
     "afternoon": "Pomeriggio",
     "evening": "Sera",
     "cancelOperation": "Annulla operazione",
-    "enterMotivation": "Inserisci una motivazione"
+    "enterMotivation": "Inserisci una motivazione",
+    "doItForMe": "Fallo per me"
   },
   "qrScan": {
     "enterPlanCode": "Inserisci il codice del piano...",
     "scan": "SCANSIONA",
-    "successMessage": "NUOVO PIANO AGGIUNTO CON SUCCESSO!"
+    "successMessage": "NUOVO PIANO AGGIUNTO CON SUCCESSO!",
+    "instruction": "Scannerizza codice QR del nuovo piano o inserisci il codice manualmente"
   },
   "enums": {
     "modalities": {
