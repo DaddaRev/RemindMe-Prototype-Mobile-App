@@ -3,12 +3,14 @@ import { Container, Button, Form, Alert, Spinner, Row, Col } from 'react-bootstr
 import { useNavigate, useLocation, useParams } from 'react-router';
 import API from "../API/API.mjs";
 import { useTranslation } from 'react-i18next';
+import { useEnumTranslation } from "../utils/translationHelpers";
 
 const UpdatePage = (props) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { planId, medicineId } = useParams(); // Prende gli ID dall'URL
   const { t } = useTranslation();
+  const { translateModality, translateDescription } = useEnumTranslation();
 
   // Recupera dati passati dalla Home o null se accesso diretto
   const passedData = location.state?.medicine;
@@ -351,7 +353,7 @@ const UpdatePage = (props) => {
                   </div>
                 </Col>
                 <Col xs={4} className="text-center">
-                  <div className="fw-bold text-uppercase" style={{ color: '#2D2D2D', fontSize: '1.2rem' }}>{formData.modality}</div>
+                  <div className="fw-bold text-uppercase" style={{ color: '#2D2D2D', fontSize: '1.2rem' }}>{translateModality(formData.modality)}</div>
                 </Col>
               </Row>
             </div>
@@ -362,7 +364,7 @@ const UpdatePage = (props) => {
                 {t('updatePage.description')}
               </div>
               <div className="fst-italic px-3 py-2 border-start border-3" style={{ minHeight: '60px', fontSize: '1.05rem', lineHeight: '1.5', color: '#555', borderColor: '#e0af65 !important' }}>
-                {formData.description || <span className="text-muted opacity-75">{t('updatePage.noDescription')}</span>}
+                {formData.description ? translateDescription(formData.description) : <span className="text-muted opacity-75">{t('updatePage.noDescription')}</span>}
               </div>
             </div>
 
@@ -408,11 +410,11 @@ const UpdatePage = (props) => {
                   value={formData.modality}
                   onChange={(e) => setFormData({ ...formData, modality: e.target.value })}
                 >
-                  <option value="ORAL">ORAL</option>
-                  <option value="INJECTION">INJECTION</option>
-                  <option value="TOPICAL">TOPICAL</option>
-                  <option value="DROPS">DROPS</option>
-                  <option value="INHALATION">INHALATION</option>
+                  <option value="ORAL">{t('enums.modalities.Orale')}</option>
+                  <option value="INJECTION">{t('enums.modalities.Iniezione')}</option>
+                  <option value="TOPICAL">{t('enums.modalities.Topica')}</option>
+                  <option value="DROPS">{t('enums.modalities.Gocce')}</option>
+                  <option value="INHALATION">{t('enums.modalities.Inalatoria')}</option>
                 </Form.Select>
               </div>
             </div>
@@ -423,7 +425,7 @@ const UpdatePage = (props) => {
                 className="edit-field-box text-start fw-normal align-items-start h-auto w-100 mt-3"
                 rows="4"
                 style={{ resize: 'none', fontSize: '0.98rem', color: '#2d2d2d' }}
-                value={formData.description}
+                value={translateDescription(formData.description)}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 placeholder={t('updatePage.descriptionPlaceholder')}
               ></textarea>

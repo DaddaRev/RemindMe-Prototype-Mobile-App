@@ -101,6 +101,37 @@
     "scan": "SCANSIONA",
     "successMessage": "NUOVO PIANO AGGIUNTO CON SUCCESSO!"
   },
+  "enums": {
+    "modalities": {
+      "Orale": "Orale",
+      "Iniezione": "Iniezione",
+      "Topica": "Topico",
+      "Gocce": "Gocce",
+      "Inalatoria": "Inalazione"
+    },
+    "medicineDescriptions": {
+      "fever_and_pain": "Trattamento di febbre, stati influenzali e dolori di varia natura.",
+      "headache_menstrual_pain": "Analgesico specifico per mal di testa, dolori mestruali e nevralgie.",
+      "joint_muscle_inflammation": "Antinfiammatorio per dolori articolari, muscolari e stati febbrili.",
+      "abdominal_cramps": "Allevia i crampi addominali e i dolori del tratto gastrointestinale.",
+      "heartburn_reflux": "Contrasta il bruciore di stomaco e il reflusso gastroesofageo.",
+      "bacterial_infection": "Antibiotico per infezioni batteriche delle vie respiratorie o dentali.",
+      "allergies_antihistamine": "Antistaminico per il trattamento di allergie, riniti e orticaria.",
+      "high_blood_pressure": "Farmaco antipertensivo per il controllo della pressione alta.",
+      "fluid_retention": "Diuretico per ridurre la ritenzione idrica e l'ipertensione.",
+      "severe_inflammation_asthma": "Corticosteroide per infiammazioni gravi, asma o reazioni allergiche.",
+      "acute_diarrhea": "Trattamento sintomatico della diarrea acuta.",
+      "antacid_suspension": "Sospensione orale per alleviare acidità e bruciore di stomaco.",
+      "dental_throat_pain": "Antinfiammatorio potente per mal di denti e infiammazioni della gola.",
+      "local_pain_relief": "Trattamento locale di dolori articolari, muscolari e tendinei.",
+      "cough_phlegm": "Mucolitico per sciogliere il catarro in caso di tosse grassa.",
+      "intestinal_flora": "Probiotico per ripristinare la flora batterica intestinale.",
+      "anxiety_sleep_disorder": "Trattamento degli stati d'ansia e disturbi del sonno.",
+      "nasal_congestion": "Decongestionante per liberare il naso chiuso durante il raffreddore.",
+      "broad_spectrum_antibiotic": "Antibiotico ad ampio spettro somministrato per via intramuscolare.",
+      "skin_infection_eczema": "Pomata antibiotica e cortisonica per dermatiti e infezioni cutanee."
+    }
+  },
   "updatePage": {
     "notFound": "Medicina non trovata.",
     "errorLoading": "Errore nel caricamento dei dettagli della medicina.",

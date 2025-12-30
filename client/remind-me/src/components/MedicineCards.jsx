@@ -1,4 +1,5 @@
 import { Card, Row, Col, Button } from 'react-bootstrap';
+import { useEnumTranslation } from '../utils/translationHelpers';
 
 const getMedicineIcon = (type) => {
   switch (type) {
@@ -10,6 +11,8 @@ const getMedicineIcon = (type) => {
 };
 
 export function MedicineCard(props) {
+  const { translateDescription } = useEnumTranslation();
+
   return (
     <Card 
       className="mb-3 border-3 medicine-card" 
@@ -50,7 +53,7 @@ export function MedicineCard(props) {
           </Col>
         </Row>
         <hr className="my-2" />
-        <p className="mb-0 fw-semibold text-uppercase">{props.medicine?.description}</p>
+        <p className="mb-0 fw-semibold text-uppercase">{translateDescription(props.medicine?.description)}</p>
       </Card.Body>
     </Card>
   );

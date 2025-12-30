@@ -101,6 +101,37 @@
     "scan": "SCAN",
     "successMessage": "NEW PLAN SUCCESSFULLY ADDED!"
   },
+  "enums": {
+    "modalities": {
+      "Orale": "Oral",
+      "Iniezione": "Injection",
+      "Topica": "Topical",
+      "Gocce": "Drops",
+      "Inalatoria": "Inhalation"
+    },
+    "medicineDescriptions": {
+      "fever_and_pain": "Treatment for fever, flu-like states and pain of various kinds",
+      "headache_menstrual_pain": "Analgesic specific for headaches, menstrual pain and neuralgia",
+      "joint_muscle_inflammation": "Anti-inflammatory for joint, muscle pain and fever states",
+      "abdominal_cramps": "Relieves abdominal cramps and gastrointestinal tract pain",
+      "heartburn_reflux": "Counteracts heartburn and gastroesophageal reflux",
+      "bacterial_infection": "Antibiotic for bacterial infections of respiratory or dental pathways",
+      "allergies_antihistamine": "Antihistamine for treatment of allergies, rhinitis and urticaria",
+      "high_blood_pressure": "Antihypertensive drug for blood pressure control",
+      "fluid_retention": "Diuretic to reduce fluid retention and hypertension",
+      "severe_inflammation_asthma": "Corticosteroid for severe inflammation, asthma or allergic reactions",
+      "acute_diarrhea": "Symptomatic treatment of acute diarrhea",
+      "antacid_suspension": "Oral suspension to relieve acidity and heartburn",
+      "dental_throat_pain": "Powerful anti-inflammatory for dental pain and throat inflammation",
+      "local_pain_relief": "Local treatment of joint, muscle and tendon pain",
+      "cough_phlegm": "Mucolytic to dissolve phlegm in case of heavy cough",
+      "intestinal_flora": "Probiotic to restore intestinal bacterial flora",
+      "anxiety_sleep_disorder": "Treatment of anxiety states and sleep disorders",
+      "nasal_congestion": "Decongestant to clear stuffy nose during cold",
+      "broad_spectrum_antibiotic": "Broad spectrum antibiotic administered intramuscularly",
+      "skin_infection_eczema": "Antibiotic and cortisone ointment for dermatitis and skin infections"
+    }
+  },
   "updatePage": {
     "notFound": "Medicine not found.",
     "errorLoading": "Error loading medicine details.",
