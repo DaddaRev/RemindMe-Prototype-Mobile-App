@@ -2,12 +2,18 @@ import { Card, Row, Col, Button } from 'react-bootstrap';
 import { useEnumTranslation } from '../utils/translationHelpers';
 
 const getMedicineIcon = (type) => {
+const getMedicineIcon = (type) => {
   switch (type) {
-    case 'pill':   return '💊';
-    case 'sachet': return '🥤';
-    case 'drops':  return '💧';
-    default:       return '💊';
+    case 'Pillola':     return '💊';
+    case 'Bustine':     return '🥄';
+    case 'Gocce':       return '💧';
+    case 'Flaconcini':  return '🍶';
+    case 'Spray':       return '💨';
+    case 'Fiala':       return '🧪';
+    case 'Crema':       return '🧴';
+    default:            return '💊';
   }
+};
 };
 
 export function MedicineCard(props) {
