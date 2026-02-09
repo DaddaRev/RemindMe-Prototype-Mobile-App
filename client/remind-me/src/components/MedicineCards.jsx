@@ -2,7 +2,6 @@ import { Card, Row, Col, Button } from 'react-bootstrap';
 import { useEnumTranslation } from '../utils/translationHelpers';
 
 const getMedicineIcon = (type) => {
-const getMedicineIcon = (type) => {
   switch (type) {
     case 'Pillola':     return '💊';
     case 'Bustine':     return '🥄';
@@ -13,7 +12,6 @@ const getMedicineIcon = (type) => {
     case 'Crema':       return '🧴';
     default:            return '💊';
   }
-};
 };
 
 export function MedicineCard(props) {
