@@ -3,6 +3,7 @@ import { useState } from 'react';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import BackButton from './BackButton';
 
 function HelpPage() {
     const { t } = useTranslation();
@@ -22,15 +23,8 @@ function HelpPage() {
 
     return(
         <div className="home-page d-flex flex-column">
-            <div className="px-3 pt-3 align-self-start" style={{ zIndex: 10 }}>
-                <Button
-                    className="border-3 fw-bold action-btn d-inline-flex align-items-center"
-                    style={{ background: 'rgba(254, 254, 254, 1)', borderColor: '#2D2D2D', color: '#1a1a1a', whiteSpace: 'nowrap' }}
-                    onClick={() => navigate(-1)}
-                    aria-label={t('back')}
-                >
-                    ← {t('back')}
-                </Button>
+            <div className="px-3 pt-3">
+                <BackButton />
             </div>
 
             <Container fluid className="flex-grow-1 d-flex flex-column px-3 pb-3" style={{ minHeight: 0 }}>
