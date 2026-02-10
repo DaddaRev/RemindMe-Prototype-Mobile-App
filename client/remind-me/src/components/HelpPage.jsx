@@ -127,19 +127,41 @@ function HelpPage() {
                 centered
                 size="sm"
             >
-                <Modal.Body className='fs-5 text-center'>
-                {t('helpPage.notificationMessage', { name: selected })}
-                </Modal.Body>
-                <Modal.Footer className="d-flex justify-content-center">
-                <Button
-                    size="lg"
-                    className="border-3 fw-bold action-btn d-inline-flex align-items-center"
-                    style={{ background: 'rgba(236, 241, 139, 1)', borderColor: '#2D2D2D', color: '#1a1a1a', whiteSpace: 'nowrap' }}
-                    onClick={onHide}
-                    aria-label="OK"
+                <Modal.Header
+                    className="border-3 border-dark rounded-top"
+                    style={{ backgroundColor: '#FFF9E6' }}
                 >
-                    OK
-                </Button>
+                    <Modal.Title className="w-100 text-center fw-bold">
+                        {t('helpPage.askForHelp')}
+                    </Modal.Title>
+                </Modal.Header>
+
+                <Modal.Body
+                    className="text-center fs-6"
+                    style={{ backgroundColor: '#FFF9E6' }}
+                >
+                    {t('helpPage.notificationMessage', { name: selected })}
+                </Modal.Body>
+
+                <Modal.Footer
+                    className="d-flex justify-content-center border-top border-3 border-dark rounded-bottom"
+                    style={{ backgroundColor: '#FFF9E6' }}
+                >
+                    <Button
+                        variant=""
+                        size="lg"
+                        className="w-100 py-2 border-3 fw-bold"
+                        style={{
+                            backgroundColor: '#D6EEA6',
+                            borderColor: '#2D2D2D',
+                            color: '#000000',
+                            borderRadius: '12px'
+                        }}
+                        onClick={onHide}
+                        aria-label="OK"
+                    >
+                        OK
+                    </Button>
                 </Modal.Footer>
             </Modal>
         </div>

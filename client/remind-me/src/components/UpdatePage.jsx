@@ -455,20 +455,14 @@ const UpdatePage = (props) => {
 
       <div className="action-section p-3 mt-auto border-top border-3 border-dark">
         <div className="d-flex justify-content-center">
-          <Button 
-            className="w-100 py-3 border-3 fw-bold"
-            style={{
-              background: 'rgba(254, 254, 254, 1)',
-              borderColor: '#2D2D2D',
-              color: '#1a1a1a',
-              borderRadius: '12px',
-              transition: 'all 0.2s ease',
-              fontSize: '18px'
-            }}
+          <Button
+            className="w-100 py-3 border-3 fw-bold action-btn"
+            style={{ background: 'rgba(254, 254, 254, 1)', borderColor: '#2D2D2D', color: '#1a1a1a' }}
+            onClick={() => navigate('/help')}
           >
             <div className="d-flex align-items-center justify-content-center gap-4">
               <span>{t('helpPage.askForHelp')}</span>
-              <span><i className="bi bi-telephone-fill text-success fs-3"></i></span>
+              <span><i class="bi bi-telephone-fill text-success fs-3"></i></span>
             </div>
           </Button>
         </div>

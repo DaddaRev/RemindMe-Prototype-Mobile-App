@@ -65,7 +65,7 @@
     "neighbor": "Vicino",
     "friend": "Amico",
     "askForHelp": "Chiedi aiuto",
-    "notificationMessage": "Una volta che {{name}} avrà completato il tuo piano sarai notificato!"
+    "notificationMessage": "{{name}} è stato notificato del tuo bisogno di aiuto. Sarai notificato una volta che risponderà."
   },
   "infoPlanModal": {
     "title": "Informazioni sul piano",

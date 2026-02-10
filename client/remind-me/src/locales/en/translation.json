@@ -59,13 +59,13 @@
     "noPlans": "There are no uploaded plans for the moment"
   },
   "helpPage": {
-    "question": "Who you want to perform the action for you?",
+    "question": "Who do you want to perform the action for you?",
     "primaryPhysician": "Primary physician",
     "cardiologist": "Cardiologist",
     "neighbor": "Neighbor",
     "friend": "Friend",
     "askForHelp": "Ask for help",
-    "notificationMessage": "Once {{name}} has completed your plan you will be notified!"
+    "notificationMessage": "{{name}} has been notified about your need for help. You will be notified once they respond."
   },
   "infoPlanModal": {
     "title": "Information on plan",
