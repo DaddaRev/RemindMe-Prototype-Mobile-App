@@ -1,5 +1,3 @@
-# README
-
 ## Project Overview
 
 This project presents **Remind-Me**, a prototype application designed to support people in managing their medication routines.
@@ -11,6 +9,86 @@ The project is the final outcome of a **semester-long Human-Computer Interaction
 This repository contains a **prototype**, not a production-ready mobile app. For this reason, the implementation is intentionally lightweight and built with JavaScript and React based rather than native mobile technologies. The objective is to communicate the interaction model and user experience concept, not to deliver a final commercial product.
 
 In short, this prototype demonstrates how an HCI-centered approach can guide the design of accessible and meaningful medication reminder experiences.
+
+## Features
+
+- Possibility to check the current medication assumption plan.
+- Possibility to change the weekly assumption plan according to mobility constraints.
+- Possibility to create a new plan.
+
+## Prototype Screenshots
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="media/StartScreen.png" alt="Start screen" width="100%" />
+      <p><em>Start Screen</em></p>
+    </td>
+    <td align="center" width="50%">
+      <img src="media/HomePageScre.png" alt="Home page screen" width="100%" />
+      <p><em>Home Page Screen</em></p>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="media/PersonScreen.png" alt="Personalization screen" width="100%" />
+      <p><em>Personalization Screen</em></p>
+    </td>
+    <td align="center" width="50%">
+      <img src="media/MedicineDetails.png" alt="Medicine details screen" width="100%" />
+      <p><em>Medicine Details Screen</em></p>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="media/ModifyMedicineScreen.png" alt="Modify medicine screen" width="100%" />
+      <p><em>Modify Medicine Screen</em></p>
+    </td>
+    <td align="center" width="50%">
+    </td>
+  </tr>
+</table>
+
+## Setup and Run
+
+Before starting the application, install dependencies in both the client and server directories.
+
+### 1) Install packages
+
+From the project root:
+
+```bash
+cd client/remind-me
+npm install
+
+cd ../../server
+npm install
+```
+
+### 2) Run the client
+
+In `client/remind-me`:
+
+```bash
+npm run dev
+```
+
+### 3) Run the server
+
+In `server`:
+```bash
+node index.mjs
+```
+
+### 4) Expose the client for mobile testing (ngrok)
+
+With the client already running, open another terminal in `client/remind-me` and run:
+
+```bash
+npm run tunnel
+```
+
+This creates an ngrok tunnel so the prototype can be reached from a mobile device.
 
 ## DB Entities
 
