@@ -1,5 +1,17 @@
 # README
 
+## Project Overview
+
+This project presents **Remind-Me**, a prototype application designed to support people in managing their medication routines.
+
+The core goal is to help users remember when and how to take medicines, while also considering potential **mobility difficulties** that can affect daily medication management.
+
+The project is the final outcome of a **semester-long Human-Computer Interaction (HCI) process**. During this process, we investigated the deeper needs of our target users—especially **elderly people**—and translated those insights into a human-centered design proposal.
+
+This repository contains a **prototype**, not a production-ready mobile app. For this reason, the implementation is intentionally lightweight and built with JavaScript and React based rather than native mobile technologies. The objective is to communicate the interaction model and user experience concept, not to deliver a final commercial product.
+
+In short, this prototype demonstrates how an HCI-centered approach can guide the design of accessible and meaningful medication reminder experiences.
+
 ## DB Entities
 
 ### Medicine
