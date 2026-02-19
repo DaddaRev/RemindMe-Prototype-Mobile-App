@@ -21,27 +21,27 @@ In short, this prototype demonstrates how an HCI-centered approach can guide the
 <table>
   <tr>
     <td align="center" width="50%">
-      <img src="media/StartScreen.png" alt="Start screen" width="100%" />
+      <img src="media/StartScreen.png" alt="Start screen" width="65%" />
       <p><em>Start Screen</em></p>
     </td>
     <td align="center" width="50%">
-      <img src="media/HomePageScre.png" alt="Home page screen" width="100%" />
+      <img src="media/HomePageScre.png" alt="Home page screen" width="65%" />
       <p><em>Home Page Screen</em></p>
     </td>
   </tr>
   <tr>
     <td align="center" width="50%">
-      <img src="media/PersonScreen.png" alt="Personalization screen" width="100%" />
+      <img src="media/PersonScreen.png" alt="Personalization screen" width="65%" />
       <p><em>Personalization Screen</em></p>
     </td>
     <td align="center" width="50%">
-      <img src="media/MedicineDetails.png" alt="Medicine details screen" width="100%" />
+      <img src="media/MedicineDetails.png" alt="Medicine details screen" width="65%" />
       <p><em>Medicine Details Screen</em></p>
     </td>
   </tr>
   <tr>
     <td align="center" width="50%">
-      <img src="media/ModifyMedicineScreen.png" alt="Modify medicine screen" width="100%" />
+      <img src="media/ModifyMedicineScreen.png" alt="Modify medicine screen" width="65%" />
       <p><em>Modify Medicine Screen</em></p>
     </td>
     <td align="center" width="50%">
